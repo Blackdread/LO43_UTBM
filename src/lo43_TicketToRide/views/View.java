@@ -15,9 +15,8 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.state.transition.Transition;
 
-import base.engine.EngineManager;
-import base.engine.Game;
-import base.utils.Configuration;
+import lo43_TicketToRide.engine.Game;
+import lo43_TicketToRide.utils.Configuration;
 
 
 /**
@@ -30,7 +29,7 @@ public abstract class View extends BasicGameState {
 
 	protected GameContainer container;
 	protected static Game game;
-	protected EngineManager engineManager = Game.getEngineManager();
+	//protected EngineManager engineManager = Game.getEngineManager();
 	protected static int lastViewID = 0;
 	
 	@Override
