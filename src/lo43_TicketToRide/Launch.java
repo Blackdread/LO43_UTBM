@@ -21,9 +21,9 @@ public class Launch {
 		try {
 			Game g;
 			//if(System.getProperties().getProperty("os.name").equalsIgnoreCase("Mac OS X"))
-			//	g = new Game("config/config.properties", "resources/");
+				g = new Game("config/config.properties", "resources/");
 			//else
-				g = new Game("config/config.properties", "libs/resources.jar");
+				//g = new Game("config/config.properties", "libs/resources.jar");
 			
 			g.launch();
 		} catch (IOException e) {
