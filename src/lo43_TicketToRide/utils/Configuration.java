@@ -290,5 +290,6 @@ public class Configuration {
 		return configurationFile.getProperty("pseudo", "noName");
 	}
 	
+	
 }
 

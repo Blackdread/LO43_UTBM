@@ -2,6 +2,8 @@ package lo43_TicketToRide;
 
 import java.io.IOException;
 
+import lo43_TicketToRide.engine.Game;
+
 import org.newdawn.slick.SlickException;
 
 
@@ -17,7 +19,7 @@ public class Launch {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		/*
+		//*
 		try {
 			Game g;
 			//if(System.getProperties().getProperty("os.name").equalsIgnoreCase("Mac OS X"))
