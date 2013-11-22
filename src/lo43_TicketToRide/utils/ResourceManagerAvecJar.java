@@ -1,8 +1,10 @@
 package lo43_TicketToRide.utils;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Image;
@@ -39,18 +41,11 @@ import org.newdawn.slick.particles.ParticleSystem;
  * 
  * /resources /fonts /images /maps /musics /sounds /sprites /systems
  * 
- * @version 1.0 Changed from original
- * On n'utilise plus le jar mais seulement un repertoire qui contient les ressources, plus simple et plus rapide pour faire
- * les tests
- * @IMPORTANT Slick 2D -> RessourceManager mal penser, il faut charger les ressources au fur et a mesure que l'on en a besoin
- * @TODO Mal penser encore -> il charge que ce qui se trouve apres les dossiers "images" "sprites" etc mais si on veut rajouter des
- * dossier il ne sera pas en mesure de charger ce qui se trouve plus loin
- * 
- * 
  * @author Yoann CAPLAIN
- * @author Kevin
+ * 
  */
-public class ResourceManagerSansJar {
+@Deprecated
+public class ResourceManagerAvecJar {
 
 	private static final boolean FONT_WITH_CACHE = false;
 
@@ -67,58 +62,57 @@ public class ResourceManagerSansJar {
 	/**
 	 * Initialize the content of the resources list.
 	 * 
-	 * @param filesLocation
-	 *            The location of files.
+	 * @param jarLocation
+	 *            The location of the jar that contain resources.
 	 * @throws IOException
-	 *             If the directory location is false.
+	 *             If the jar location is false.
 	 * @throws SlickException
-	 *             If a resource can't be loaded.
+	 *             If a resource can't be loaded from the jar.
 	 */
-	public static void init(String filesLocation) throws IOException, SlickException {
+	public static void init(String jarLocation) throws IOException, SlickException {
 		list = LoadingList.get();
 		
-		File repertoire = new File(filesLocation);
-		File[] listFiles = repertoire.listFiles();
+		JarFile jarFile = new JarFile(jarLocation);
+		Enumeration<JarEntry> e = jarFile.entries();
 		
-		for (int i=0; i < listFiles.length; i++) {
-			if(!listFiles[i].isDirectory()){
-				String path = listFiles[i].getPath();
-				if (path.startsWith("resources") && path.length() > 10) {
-					String dataInfo = path.split("/")[1];
-					if (!path.endsWith("/")) {
-						if(path.split("/")[1].startsWith("."))
-							continue;
-						String name = path.split("/")[2].split("[.]")[0];
-						if(path.split("/")[2].startsWith("."))
-							continue;
-						//System.out.println(""+path);
-						if (dataInfo.equals("images")) {
-							list.add(new DeferredImage(name, path));
-						} else {
-							if (dataInfo.equals("sprites")) {
-								String[] info = name.split("_");
-								if (info.length > 1) {
-									int tw = Integer.parseInt(info[0]);
-									int th = Integer.parseInt(info[1]);
-									if (info.length == 4) {
-										list.add(new DeferredSprite(info[2] + "_" + info[3], path, tw, th));
-									} else{
-										list.add(new DeferredSprite(info[2], path, tw, th));
-									}
+		while (e.hasMoreElements()) {
+			JarEntry je = e.nextElement();
+			String path = je.getName();
+			if (path.startsWith("resources") && path.length() > 10) {
+				String dataInfo = path.split("/")[1];
+				if (!path.endsWith("/")) {
+					if(path.split("/")[1].startsWith("."))
+						continue;
+					String name = path.split("/")[2].split("[.]")[0];
+					if(path.split("/")[2].startsWith("."))
+						continue;
+					//System.out.println(""+path);
+					if (dataInfo.equals("images")) {
+						list.add(new DeferredImage(name, path));
+					} else {
+						if (dataInfo.equals("sprites")) {
+							String[] info = name.split("_");
+							if (info.length > 1) {
+								int tw = Integer.parseInt(info[0]);
+								int th = Integer.parseInt(info[1]);
+								if (info.length == 4) {
+									list.add(new DeferredSprite(info[2] + "_" + info[3], path, tw, th));
+								} else{
+									list.add(new DeferredSprite(info[2], path, tw, th));
 								}
+							}
+						} else {
+							if (dataInfo.equals("sounds")) {
+								list.add(new DeferredSound(name, path));
 							} else {
-								if (dataInfo.equals("sounds")) {
-									list.add(new DeferredSound(name, path));
+								if (dataInfo.equals("musics")) {
+									list.add(new DeferredMusic(name, path));
 								} else {
-									if (dataInfo.equals("musics")) {
-										list.add(new DeferredMusic(name, path));
+									if (dataInfo.equals("systems")) {
+										systemsAndEmitters.put(name, path);
 									} else {
-										if (dataInfo.equals("systems")) {
-											systemsAndEmitters.put(name, path);
-										} else {
-											if (dataInfo.equals("fonts") && !path.endsWith(".png")) {
-												list.add(new DeferredFont(name, path.split("[.]")[0]));
-											}
+										if (dataInfo.equals("fonts") && !path.endsWith(".png")) {
+											list.add(new DeferredFont(name, path.split("[.]")[0]));
 										}
 									}
 								}
@@ -126,8 +120,6 @@ public class ResourceManagerSansJar {
 						}
 					}
 				}
-			}else{	// it's a directory
-				init(listFiles[i].getPath());
 			}
 		}
 	}
@@ -275,7 +267,7 @@ public class ResourceManagerSansJar {
 			try {
 				AngelCodeFont font = new AngelCodeFont(name, Thread.currentThread().getContextClassLoader().getResourceAsStream(path + ".fnt"), Thread
 						.currentThread().getContextClassLoader().getResourceAsStream(path + ".png"), FONT_WITH_CACHE);
-				ResourceManagerSansJar.fonts.put(name, font);
+				ResourceManagerAvecJar.fonts.put(name, font);
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
@@ -299,7 +291,7 @@ public class ResourceManagerSansJar {
 		public void load() throws IOException {
 			try {
 				Image image = new Image(path);
-				ResourceManagerSansJar.images.put(name, image);
+				ResourceManagerAvecJar.images.put(name, image);
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
@@ -328,10 +320,10 @@ public class ResourceManagerSansJar {
 		public void load() throws IOException {
 			try {
 				if(Thread.currentThread().getContextClassLoader().getResourceAsStream(path) != null)
-					ResourceManagerSansJar.sprites.put(name, new SpriteSheet(name, Thread.currentThread().getContextClassLoader().getResourceAsStream(path), tileWidth,
+					ResourceManagerAvecJar.sprites.put(name, new SpriteSheet(name, Thread.currentThread().getContextClassLoader().getResourceAsStream(path), tileWidth,
 						tileHeight));
 				else{
-					ResourceManagerSansJar.sprites.put(name, new SpriteSheet(path, tileWidth, tileHeight));
+					ResourceManagerAvecJar.sprites.put(name, new SpriteSheet(path, tileWidth, tileHeight));
 				}
 			} catch (SlickException e) {
 				e.printStackTrace();
@@ -356,7 +348,7 @@ public class ResourceManagerSansJar {
 
 		public void load() throws IOException {
 			try {
-				ResourceManagerSansJar.sounds.put(name, new Sound(path));
+				ResourceManagerAvecJar.sounds.put(name, new Sound(path));
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}
@@ -380,7 +372,7 @@ public class ResourceManagerSansJar {
 
 		public void load() throws IOException {
 			try {
-				ResourceManagerSansJar.musics.put(name, new Music(path));
+				ResourceManagerAvecJar.musics.put(name, new Music(path));
 			} catch (SlickException e) {
 				e.printStackTrace();
 			}

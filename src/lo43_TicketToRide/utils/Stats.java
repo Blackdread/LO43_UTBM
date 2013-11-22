@@ -12,6 +12,8 @@ import java.util.Properties;
  * Des stats (nb de fois morts, nb de fois gagner, perdu, ...)
  * @author Yoann CAPLAIN
  *
+ * Aucun stat ni methodes n'ont été ajouté, a faire ou utiliser stats serializable
+ *
  */
 @Deprecated
 public class Stats {

@@ -67,19 +67,20 @@ public class Game extends StateBasedGame {
 	@Override
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new ResourcesView(container));
+		
 		addState(new MainMenuView());
 		addState(new OptionsView());
 		addState(new CreditsView());
+		/*
 		addState(new SoloView());
 		addState(new MultiView());
 		addState(new SalonView());
 		
-		addState(new TransitionView());
+		addState(new TransitionView());//*/
 		addState(new LastView());
 		
-		addState(new EndGameSoloView());
-		addState(new TestView());
-		addState(new InGameMultiView());
+		//addState(new InGameMultiView());
+		//*/
 		
 	}
 	

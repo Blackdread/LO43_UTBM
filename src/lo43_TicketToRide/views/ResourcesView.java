@@ -32,8 +32,6 @@ public class ResourcesView extends View {
 	//private Image background;
 	private ProgressBarFillRect bar;
 	private Timer timer;
-	
-	
 
 	public ResourcesView(GameContainer container) {
 		timer = new Timer(WAIT_TIME_BEFORE_NEXTR);
