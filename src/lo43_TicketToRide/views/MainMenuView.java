@@ -5,6 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.StateBasedGame;
@@ -28,6 +29,7 @@ public class MainMenuView extends View {
 
 	private Image background;
 	private MouseOverArea butJouer, butSolo, butMulti, butOption, butQuitter, butCredits;
+	Music music;
 	
 	private boolean wasOverJouer = false;
 	private boolean doOnce = false;
@@ -64,23 +66,6 @@ public class MainMenuView extends View {
 		butCredits.setMouseOverImage(ResourceManager.getImage("transparent"));
 		butCredits.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
-		
-		/*
-		if(Configuration.isMusicOn()){
-			Message m = new Message();
-			m.instruction = MessageKey.I_PLAY_MUSIC;
-			// TODO donner le nom de la musique a jouer
-			m.s_data.put(MessageKey.P_NAME, "tron");
-			
-			m.engine = EngineManager.SOUND_ENGINE;
-			
-			engineManager.receiveMessage(m);
-		}
-		if(!doOnce){
-			LevelManager.getInstance(engineManager).addLevels("levels");
-			
-			doOnce = true;
-		}*/
 	}
 	
 	@Override

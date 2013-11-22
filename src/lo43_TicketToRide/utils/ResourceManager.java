@@ -253,6 +253,53 @@ public class ResourceManager {
 		return ParticleIO.loadEmitter(systemsAndEmitters.get(name));
 	}
 
+	/**
+	 * add an image to the resources manager.
+	 * 
+	 * @param name the name of the sprite.
+	 * @param path contains the name file and extension
+	 * @return the requested sprite or null if the resource was not found.
+	 */
+	public static void addImage(String name, String path){
+		try {
+			images.put(name, new Image("resources/images/"+path));
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * add a music to the resources manager.
+	 * 
+	 * @param name the name of the sprite.
+	 * @param path contains the name file and extension
+	 * @return the requested sprite or null if the resource was not found.
+	 */
+	public static void addMusic(String name, String path){
+		try {
+			musics.put(name, new Music("resources/musics/"+path));
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * add a sound to the resources manager.
+	 * 
+	 * @param name the name of the sprite.
+	 * @param path contains the name file and extension
+	 * @return the requested sprite or null if the resource was not found.
+	 */
+	public static void addSound(String name, String path){
+		try {
+			sounds.put(name, new Sound("resources/sounds/"+path));
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/*
 	 * Useful classes to load deferred resources.
 	 */
