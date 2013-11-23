@@ -25,46 +25,61 @@ import lo43_TicketToRide.utils.ResourceManager;
  * @author Yoann CAPLAIN
  * 
  */
-public class MainMenuView extends View {
+public abstract class MainMenuView extends View {
 
 	private Image background;
-	private MouseOverArea butJouer, butSolo, butMulti, butOption, butQuitter, butCredits;
-	Music music;
-	
-	private boolean wasOverJouer = false;
-	private boolean doOnce = false;
+	protected MouseOverArea butSolo, butPasseEtJoue, butMulti, butOption, butQuitter, butCredits, butRetour;
 
+	// max 5 joueurs
+	protected final int NB_MAX_JOUEUR = 5;
+	protected boolean isIA[] = new boolean[NB_MAX_JOUEUR];
+	protected MouseOverArea[] switchIA = new MouseOverArea[NB_MAX_JOUEUR];
+	
 	@Override
 	public void initResources() {
-		background = ResourceManager.getImage("transparent").getScaledCopy(container.getWidth(), container.getHeight());
+		background = ResourceManager.getImage("western").getScaledCopy(container.getWidth(), container.getHeight());
 
-		Image tmp = ResourceManager.getImage("transparent");
-		
+		Image tmp = ResourceManager.getImage("butSolo");
 		int larg = tmp.getWidth();
 		int haut = tmp.getHeight();
+		int margin = 30;
+
+		int x = container.getWidth() / 2 - larg/2 - margin * 3;
+		int y = container.getHeight() / 4 - haut/2;
 		
-		int x = container.getWidth() / 2 - larg/2;
-		int y = container.getHeight() / 2 - haut/2 * 4;
+		butSolo = new MouseOverArea(container, ResourceManager.getImage("butSolo"), x, y, larg, haut);
+		//butSolo.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butSolo.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
-		butJouer = new MouseOverArea(container, tmp, x, y, larg, haut);
-		butJouer.setMouseOverImage(ResourceManager.getImage("transparent"));
-		butJouer.setMouseDownSound(ResourceManager.getSound("transparent"));
-		
-		butMulti = new MouseOverArea(container, ResourceManager.getImage("transparent"), x + tmp.getWidth() + ResourceManager.getImage("transparent").getWidth(), y, ResourceManager.getImage("transparent").getWidth(), ResourceManager.getImage("transparent").getHeight());
-		butMulti.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butMulti = new MouseOverArea(container, ResourceManager.getImage("butMulti"), x + larg + margin, y, larg, haut);
+		//butMulti.setMouseOverImage(ResourceManager.getImage("transparent"));
 		butMulti.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
-		butOption = new MouseOverArea(container, ResourceManager.getImage("transparent"), x, y+haut, larg, haut);
-		butOption.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butPasseEtJoue = new MouseOverArea(container, ResourceManager.getImage("butPasseEtJoue"), x + (larg + margin)*2, y, larg, haut);
+		butPasseEtJoue.setMouseDownSound(ResourceManager.getSound("butClick"));
+		
+		butOption = new MouseOverArea(container, ResourceManager.getImage("butOption"), x, y, larg, haut);
+		//butOption.setMouseOverImage(ResourceManager.getImage("transparent"));
 		butOption.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
-		butQuitter = new MouseOverArea(container, ResourceManager.getImage("transparent"), x, y+haut*2-25, larg, haut);
-		butQuitter.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butCredits = new MouseOverArea(container, ResourceManager.getImage("butCredits"), 50, container.getHeight() - 50 - haut, larg, haut);
+		//butCredits.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butCredits.setMouseDownSound(ResourceManager.getSound("butClick"));
+		
+		butQuitter = new MouseOverArea(container, ResourceManager.getImage("butQuitter"), 50 + larg + margin, container.getHeight() - 50 - haut, larg, haut);
+		//butQuitter.setMouseOverImage(ResourceManager.getImage("transparent"));
 		butQuitter.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
-		butCredits = new MouseOverArea(container, ResourceManager.getImage("transparent"), x, y+haut*3-50, larg, haut);
-		butCredits.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butRetour = new MouseOverArea(container, ResourceManager.getImage("butRetour"), 50, 70, larg, haut);
+		//butCredits.setMouseOverImage(ResourceManager.getImage("transparent"));
 		butCredits.setMouseDownSound(ResourceManager.getSound("butClick"));
+		
+		tmp = ResourceManager.getImage("switchOFF");
+		int larg2 = tmp.getWidth();
+		haut = tmp.getHeight();
+		
+		for(int i=0;i<NB_MAX_JOUEUR;++i)
+			switchIA[i] = new MouseOverArea(container, tmp, x - larg2 - margin + i*(larg+margin), y + haut + 10, larg2, haut);
 		
 	}
 	
@@ -76,16 +91,18 @@ public class MainMenuView extends View {
 	}
 	
 	@Override
-	public void render(GameContainer container, StateBasedGame sbgame, Graphics g) throws SlickException {	
+	public void render(GameContainer container, StateBasedGame sbgame, Graphics g) throws SlickException {
 		g.drawImage(background, 0, 0);
-		butJouer.render(container, g);
-		if(wasOverJouer){
-			butSolo.render(container, g);
-			butMulti.render(container, g);
-		}
+		butSolo.render(container, g);
+		butMulti.render(container, g);
+		butPasseEtJoue.render(container, g);
 		butOption.render(container, g);
 		butQuitter.render(container, g);
 		butCredits.render(container, g);
+		butRetour.render(container, g);
+		
+		
+		
 		g.setColor(Color.white);
 		//font.drawString(container.getWidth()-font.getWidth(Game.VERSION)-5, container.getHeight()-font.getHeight(Game.VERSION)-5, Game.VERSION, Color.cyan);
 		g.drawString(Game.VERSION, 5, container.getHeight() - 20);
@@ -94,22 +111,7 @@ public class MainMenuView extends View {
 	
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy){
-		if(wasOverJouer){
-			if(!butSolo.isMouseOver() && !butMulti.isMouseOver())
-				wasOverJouer = false;
-		}
-		if(butJouer.isMouseOver())
-			wasOverJouer = true;
-		
-		/*
-		if(butJouer.isMouseOver() || butSolo.isMouseOver() || butMulti.isMouseOver() || butOption.isMouseOver() || butQuitter.isMouseOver() || butCredits.isMouseOver() && !ResourceManager.getSound("butOver").playing()){
-			Message m = new Message();
-			m.instruction = MessageKey.I_PLAY_SOUND;
-			m.s_data.put(MessageKey.P_NAME, "butOver");
-			m.engine = EngineManager.SOUND_ENGINE;
-			
-			engineManager.receiveMessage(m);
-		}//*/
+		super.mouseMoved(oldx, oldy, newx, newy);
 		
 	}
 	
@@ -125,7 +127,7 @@ public class MainMenuView extends View {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
-		if(butJouer.isMouseOver())
+		if(butSolo.isMouseOver())
 			gotoJouerSolo();
 		else if(butOption.isMouseOver())
 			gotoOption();
@@ -133,21 +135,53 @@ public class MainMenuView extends View {
 			gotoCredits();
 		else if(butQuitter.isMouseOver())
 			gotoLastView();
-		else if(wasOverJouer){
-			if(butSolo.isMouseOver())
-				gotoJouerSolo();
-			if(butMulti.isMouseOver())
-				gotoJouerMulti();
+		else if(butMulti.isMouseOver())
+			gotoJouerMulti();
+		else if(butPasseEtJoue.isMouseOver())
+			gotoJouerPasseEtJoue();
+		else if(butRetour.isMouseOver())
+			gotoResource();
+	}
+	
+	protected void afficherSwitchIA(Graphics g){
+		for(int i=0;i<NB_MAX_JOUEUR;++i){
+			switchIA[i].render(container, g);
+			g.drawString(""+isIA[i], switchIA[i].getX(), switchIA[i].getY() + 20);
 		}
+	}
+	
+	protected void switchIA(){
+		for(int i=0;i<NB_MAX_JOUEUR;++i)
+			if(switchIA[i].isMouseOver()){
+				if(isIA[i] == false){
+					switchIA[i].setNormalImage(ResourceManager.getImage("switchON"));
+					// obliger de faire a car bug de slick
+					// apparemment par defaut il me le over l'image de base
+					switchIA[i].setMouseOverImage(ResourceManager.getImage("switchON"));
+				}else{
+					switchIA[i].setNormalImage(ResourceManager.getImage("switchOFF"));
+					// obliger de faire a car bug de slick
+					// apparemment par defaut il me le over l'image de base
+					switchIA[i].setMouseOverImage(ResourceManager.getImage("switchOFF"));
+				}
+				
+				isIA[i] = !isIA[i];
+				break;
+			}
+				
 	}
 
 	private void gotoJouerSolo() {
 		container.setMouseGrabbed(false);
-		game.enterState(Game.SOLO_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+		game.enterState(Game.MAIN_MENU_SOLO_VIEW_ID);
 	}
 	private void gotoJouerMulti() {
 		container.setMouseGrabbed(false);
-		game.enterState(Game.MULTI_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+		game.enterState(Game.MAIN_MENU_MULTI_VIEW_ID);
+	}
+	private void gotoJouerPasseEtJoue() {
+		container.setMouseGrabbed(false);
+		game.enterState(Game.MAIN_MENU_PASSE_ET_JOUE_VIEW_ID);
 	}
 	private void gotoOption() {
 		container.setMouseGrabbed(false);
@@ -156,6 +190,10 @@ public class MainMenuView extends View {
 	private void gotoCredits() {
 		container.setMouseGrabbed(false);
 		game.enterState(Game.CREDITS_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+	}
+	protected void gotoResource() {
+		container.setMouseGrabbed(false);
+		game.enterState(Game.RESOURCES_STATE_ID, new FadeOutTransition(), new FadeInTransition());
 	}
 	
 	protected void gotoLastView() {

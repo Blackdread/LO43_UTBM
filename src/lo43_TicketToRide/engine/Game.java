@@ -44,17 +44,17 @@ public class Game extends StateBasedGame {
 	public static final int CREDITS_VIEW_ID = 8;
 	public static final int REGLE_VIEW_ID = 9;
 	
-	public static final int SOLO_VIEW_ID = 16;
-	public static final int MULTI_VIEW_ID = 32;
+	public static final int MAIN_MENU_SOLO_VIEW_ID = 12;
+	public static final int MAIN_MENU_MULTI_VIEW_ID = 13;
+	public static final int MAIN_MENU_PASSE_ET_JOUE_VIEW_ID = 14;
 	public static final int SERVER_VIEW_ID = 64;
 	public static final int SALON_VIEW_ID = 128;
 	public static final int IN_GAME_MULTI_VIEW_ID = 256;
-	public static final int END_GAME_SOLO_VIEW_ID = 512;
+	public static final int END_GAME_VIEW_ID = 512;
 	
 	public static final int TRANSITION_VIEW_ID = 1024;
 	public static final int LAST_VIEW_ID = 2048;
 	
-	public static final int TEST_STATE_ID = 100;
 	
 	public Game(String configFileLocation, String resourceJarLocation) throws IOException, SlickException {
 		super(NAME);
@@ -70,7 +70,10 @@ public class Game extends StateBasedGame {
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new ResourcesView(container));
 		
-		addState(new MainMenuView());
+		//addState(new MainMenuView()); devenu abstract
+		addState(new MainMenuSoloView());
+		addState(new MainMenuMultiView());
+		addState(new MainMenuPasseView());
 		addState(new OptionsView());
 		addState(new CreditsView());
 		addState(new RegleView());

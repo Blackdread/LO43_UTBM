@@ -32,7 +32,7 @@ public class ResourcesView extends View {
 
 	private static final int WAIT_TIME_BEFORE_NEXTR = 50;
 
-	private boolean ready;
+	private boolean ready, doneOnce;
 	private Image background;
 	private ProgressBarFillRect bar;
 	private Timer timer;
@@ -48,9 +48,9 @@ public class ResourcesView extends View {
 	public void initResources() {
 		ready=false;
 		
-		//ResourceManager.addImage("backgroundIntro", "backgroundIntro.png");
-		//background = ResourceManager.getImage("intro");
-		//background = background.getScaledCopy(container.getWidth(), container.getHeight());
+		ResourceManager.addImage("western2", "western2.png");
+		background = ResourceManager.getImage("western2");
+		background = background.getScaledCopy(container.getWidth(), container.getHeight());
 		
 		
 		
@@ -97,11 +97,13 @@ public class ResourcesView extends View {
 	@Override
 	public void render(GameContainer container, StateBasedGame sbGame, Graphics g) throws SlickException {
 		super.render(container, sbGame, g);
-		//g.drawImage(background, 0, 0);
-		g.setColor(Color.red);
-		bar.render(container, g);
-		g.drawString("Loading ... " + ResourceManager.getAdvancement() + "%", bar.getX() + 20, bar.getY() - 25);
-
+		g.drawImage(background, 0, 0);
+		if(!doneOnce){
+			g.setColor(Color.red);
+			bar.render(container, g);
+			g.drawString("Loading ... " + ResourceManager.getAdvancement() + "%", bar.getX() + 20, bar.getY() - 25);
+		}
+		
 		if (ready) {
 			//g.drawString("Press a key or click", container.getWidth() / 2 - 90, container.getHeight() / 2 + 10);
 			butJouer.render(container, g);
@@ -124,31 +126,6 @@ public class ResourcesView extends View {
 				
 				ready = true;
 				
-				/*
-				SoundEngine b = new SoundEngine();
-				
-				Message a = new Message();
-				a.instruction = MessageKey.I_PLAY_MUSIC;
-				a.s_data.put(MessageKey.P_NAME, "tron");
-				a.f_data.put(MessageKey.P_VOLUME, 0.1f);
-				a.b_data.put(MessageKey.P_LOOP, false);
-				b.receiveMessage(a);
-				//b.processMessage();
-				
-				Message c = new Message();
-				c.instruction = MessageKey.I_PLAY_AT_MUSIC;
-				c.f_data.put(MessageKey.P_POSITION, 50.0f);
-				b.receiveMessage(c);
-				b.processMessage();
-				
-				Message d = new Message();
-				d.instruction = MessageKey.I_CHANGE_VOLUME_MUSIC;
-				d.f_data.put(MessageKey.P_VOLUME, 0.20f);
-				b.receiveMessage(d);
-				b.processMessage();
-				*/
-				
-				
 			}
 			timer.resetTime();
 		}
@@ -167,7 +144,7 @@ public class ResourcesView extends View {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		if(butJouer.isMouseOver())
-			goToMenu();
+			goToMenuSolo();
 		if(butRegle.isMouseOver())
 			goToRegle();
 		
@@ -175,15 +152,17 @@ public class ResourcesView extends View {
 
 	private void goToRegle() {
 		if (ready) {
+			doneOnce = true;
 			container.setMouseGrabbed(false);
 			game.enterState(Game.REGLE_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 		}
 	}
 	
-	private void goToMenu() {
+	private void goToMenuSolo() {
 		if (ready) {
+			doneOnce = true;
 			container.setMouseGrabbed(false);
-			game.enterState(Game.MAIN_MENU_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+			game.enterState(Game.MAIN_MENU_SOLO_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 			//game.enterState(Game.TEST_STATE_ID, new FadeOutTransition(), new FadeInTransition());
 		}
 	}
