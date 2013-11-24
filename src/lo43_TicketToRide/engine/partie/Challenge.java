@@ -10,9 +10,9 @@ public class Challenge {
   
 
 
-  protected Integer points;
+	protected Integer points;
 
-      protected Ville arrivee;
-      protected Ville depart;
+	protected Ville arrivee;
+	protected Ville depart;
 
 }

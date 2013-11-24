@@ -21,12 +21,12 @@ public class Joueur {
    * 
    * @element-type Challenge
    */
-  protected Vector  challenges;
+  protected Vector<Challenge>  challenges;
     /**
    * 
    * @element-type CarteWagon
    */
-  protected Vector  cartes;
+  protected Vector<CarteWagon>  cartes;
   
   public Joueur(){
 	  
@@ -38,63 +38,71 @@ public class Joueur {
 	  score = copy.score;
 	  nbWagon = copy.nbWagon;
 	  isIA = copy.isIA;
+	  challenges = getChallenges();
+	  cartes = getCartes();
   }
 
-	public String getPseudo() {
+   synchronized public String getPseudo() {
 		return pseudo;
 	}
 	
-	public int getColor() {
+   synchronized public int getColor() {
 		return color;
 	}
 	
-	public int getScore() {
+	synchronized public int getScore() {
 		return score;
 	}
 	
-	public int getNbWagon() {
+	synchronized public int getNbWagon() {
 		return nbWagon;
 	}
 	
-	public boolean isIA() {
+	synchronized public boolean isIA() {
 		return isIA;
 	}
 	
-	public Vector getChallenges() {
-		return challenges;
+	/**
+	 * 
+	 * @return a copy
+	 */
+	synchronized public Vector<Challenge> getChallenges() {
+		return new Vector<Challenge>(challenges);
+	}
+	/**
+	 * 
+	 * @return a copy
+	 */
+	synchronized public Vector<CarteWagon> getCartes() {
+		return new Vector<CarteWagon>(cartes);
 	}
 	
-	public Vector getCartes() {
-		return cartes;
+	synchronized public void ajouterCarteWagon(CarteWagon a){
+		cartes.add(a);
 	}
 	
-	public void setPseudo(String pseudo) {
+	synchronized public void ajouterChallenge(Challenge a){
+		challenges.add(a);
+	}
+	
+	synchronized public void setPseudo(String pseudo) {
 		this.pseudo = pseudo;
 	}
 	
-	public void setColor(int color) {
+	synchronized public void setColor(int color) {
 		this.color = color;
 	}
 	
-	public void setScore(int score) {
+	synchronized public void setScore(int score) {
 		this.score = score;
 	}
 	
-	public void setNbWagon(int nbWagon) {
+	synchronized public void setNbWagon(int nbWagon) {
 		this.nbWagon = nbWagon;
 	}
 	
-	public void setIA(boolean isIA) {
+	synchronized public void setIA(boolean isIA) {
 		this.isIA = isIA;
 	}
-	
-	public void setChallenges(Vector challenges) {
-		this.challenges = challenges;
-	}
-	
-	public void setCartes(Vector cartes) {
-		this.cartes = cartes;
-	}
-  
    
 }

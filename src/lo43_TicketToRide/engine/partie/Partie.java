@@ -41,13 +41,12 @@ public class Partie implements IUpdatable {
   protected Joueur tourDuJoueur;
 
   public Partie(){
-	  
+	  tempsDeJeu = new Timer(0);
   }
   
   @Override
   public void update(int delta) {
-	  // TODO Auto-generated method stub
-		
+	  tempsDeJeu.update(delta);
   }
   
   public Boolean isGameOver() {
@@ -65,11 +64,29 @@ public class Partie implements IUpdatable {
   public void finTourJoueur() {
   }
 
+  /**
+   * Pioche une carte et l'ajoute au tourDujoueur actuel
+   */
   public void piocherCarteDeck() {
+	  if(deckDeCarte.size() > 0){
+		  if(tourDuJoueur != null)
+			  tourDuJoueur.ajouterCarteWagon(deckDeCarte.remove(0));
+		  else
+			  System.err.println("Function piocherCarteDeck : tourDuJoueur == null");
+	  }
   }
-
-  public void piocherCarteRetournee(int position) {
-	  
+  
+  /**
+   * Pioche une carte a la position du vector et l'ajoute au tourDujoueur actuel
+   * @param pos Position carte
+   */
+  public void piocherCarteRetournee(int pos) {
+	  if(carteRetournee.size() > 0 && pos >= 0 && pos < carteRetournee.size()){
+		  if(tourDuJoueur != null)
+			  tourDuJoueur.ajouterCarteWagon(carteRetournee.remove(pos));
+		  else
+			  System.err.println("Function piocherCarteRetournee : tourDuJoueur == null");
+	  }
   }
   
   /**
@@ -95,7 +112,7 @@ public class Partie implements IUpdatable {
 	  return null;
   }
 
-  private void ajouterCarteManquanteRetournee() {
+  synchronized private void ajouterCarteManquanteRetournee() {
 	  if(carteRetournee.size() == Regles.NB_MAX_CARTE_RETOURNEE || deckDeCarte.size() == 0)
 		  return;
 	  carteRetournee.add(deckDeCarte.remove(0));

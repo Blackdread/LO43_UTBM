@@ -48,6 +48,7 @@ public class StatsSerializable implements Serializable{
 	/**
 	 * Charge les stats dans le hasmap
 	 */
+	@SuppressWarnings("unchecked")
 	public void loadStats(){
         try{
             FileInputStream fos = new FileInputStream(fileLocation);

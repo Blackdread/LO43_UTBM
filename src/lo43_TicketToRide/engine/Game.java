@@ -47,9 +47,12 @@ public class Game extends StateBasedGame {
 	public static final int MAIN_MENU_SOLO_VIEW_ID = 12;
 	public static final int MAIN_MENU_MULTI_VIEW_ID = 13;
 	public static final int MAIN_MENU_PASSE_ET_JOUE_VIEW_ID = 14;
-	public static final int SERVER_VIEW_ID = 64;
-	public static final int SALON_VIEW_ID = 128;
-	public static final int IN_GAME_MULTI_VIEW_ID = 256;
+	
+	public static final int PARTIE_VIEW_ID = 64;
+	public static final int PARTIE_SOLO_VIEW_ID = 65;
+	public static final int PARTIE_MULTI_VIEW_ID = 66;
+	public static final int PARTIE_PASSE_ET_JOUE_VIEW_ID = 67;
+	
 	public static final int END_GAME_VIEW_ID = 512;
 	
 	public static final int TRANSITION_VIEW_ID = 1024;

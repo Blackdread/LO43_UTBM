@@ -107,6 +107,13 @@ public abstract class PartieView extends View {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		
+		for(int i=0;i<Regles.NB_MAX_CARTE_RETOURNEE;++i)
+			if(shapeCarteRetournee[i].contains(x, y)){
+				// Demander ˆ piocher
+				
+				break;
+			}
+		
 	}
 	
 	protected void afficherJoueurs(Graphics g){
@@ -152,7 +159,7 @@ public abstract class PartieView extends View {
 
 	@Override
 	public int getID() {
-		return Game.MAIN_MENU_VIEW_ID;
+		return Game.PARTIE_VIEW_ID;
 	}
 
 }
