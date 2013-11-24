@@ -8,7 +8,20 @@ import org.newdawn.slick.Color;
  */
 public final class Colors {
 
-	public static final String[] COLORS = new String[] { "Yellow", "Red", "Green", "Blue", "Purple", "Pink", "Orange", "Cyan", "Blanc", "Noir"};
+	public static final String[] COLORS = new String[] {"Yellow", "Red", "Green", "Blue", "Purple", "Pink", "Orange", "Cyan", "Blanc", "Noir"};
+	
+	public static enum Colorss{
+		Yellow, 
+		Red, 
+		Green, 
+		Blue, 
+		Purple, 
+		Pink, 
+		Orange, 
+		Cyan, 
+		Blanc, 
+		Noir
+	}
 
 	public static final int YELLOW = 0;
 	public static final int RED = 1;

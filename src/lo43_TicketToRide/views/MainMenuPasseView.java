@@ -58,8 +58,10 @@ public class MainMenuPasseView extends MainMenuView {
 		super.render(container, sbgame, g);
 		
 		super.afficherSwitchIA(g);
-		g.drawString("Passe Menu", container.getWidth()/2, container.getHeight()/2);
+		super.afficherPseudo(g);
+		super.afficherCouleur(g);
 		
+		butLancerGame.render(container, g);
 	}
 	
 	@Override

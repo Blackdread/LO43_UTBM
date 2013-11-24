@@ -42,7 +42,8 @@ public class MainMenuMultiView extends MainMenuView {
 		int x = container.getWidth() / 2 - larg/2;
 		int y = container.getHeight() / 2 - haut/2 * 4;
 		
-		
+		for(int i=0;i<NB_MAX_JOUEUR;++i)
+			super.textFieldPseudo[i].setAcceptingInput(false);
 		
 	}
 	

@@ -27,6 +27,7 @@ public class Configuration {
 	public static final float MAX_SCALE = 3;
 	/**
 	 * Pour ne pas avoir des images trop petites
+	 * Le mieux serait de mettre 1.0f car les ecrans font a present plus de 1024x768
 	 */
 	public static final float MIN_SCALE = 0.3f;
 	
