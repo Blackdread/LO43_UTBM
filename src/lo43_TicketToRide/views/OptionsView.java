@@ -19,6 +19,7 @@ import lo43_TicketToRide.utils.Resolution;
 import lo43_TicketToRide.engine.gui.ListeDeroulante;
 import lo43_TicketToRide.engine.gui.Slider;
 import lo43_TicketToRide.engine.Game;
+import lo43_TicketToRide.engine.GameMusic;
 import lo43_TicketToRide.utils.Configuration;
 import lo43_TicketToRide.utils.ResourceManager;
 
@@ -33,7 +34,7 @@ public class OptionsView extends View {
 
 	private Image background, listeElement, listeElementOver;;
 
-	MouseOverArea butQuitter, butFullscreen, butSonDesacti, butSonActi;
+	MouseOverArea butRetour, butFullscreen, butSonDesacti, butSonActi;
 	private ListeDeroulante listeDerTailleScreen;
 	private Slider sliderMusic, sliderSound;
 	private RoundedRectangle zone[] = new RoundedRectangle[3];
@@ -55,24 +56,29 @@ public class OptionsView extends View {
 		zone[2] = new RoundedRectangle(zoneX2, MARGIN, zoneX1 - MARGIN * 2,zoneY1max, 5);
 		
 		// TODO PLACER les elements dans les differentes zones
-		/*
-		background = ResourceManager.getImage("background_options_view").getScaledCopy(container.getWidth(), container.getHeight());
+		//*
+		background = ResourceManager.getImage("western").getScaledCopy(container.getWidth(), container.getHeight());
 		
-		butQuitter = new MouseOverArea(container, ResourceManager.getImage("MenuQuitter"), container.getWidth()/10, container.getHeight()-container.getHeight()/10 - 50, ResourceManager.getImage("MenuQuitterOver").getWidth(), ResourceManager.getImage("MenuQuitterOver").getHeight());
-		butQuitter.setMouseOverImage(ResourceManager.getImage("MenuQuitterOver"));
-		butQuitter.setMouseDownSound(ResourceManager.getSound("butClick"));
+		Image tmp = ResourceManager.getImage("butRetour");
+		
+		int larg = tmp.getWidth();
+		int haut = tmp.getHeight();
+		
+		butRetour = new MouseOverArea(container, tmp, container.getWidth()/10, container.getHeight()-container.getHeight()/10 - 40, larg, haut);
+		//butRetour.setMouseOverImage(ResourceManager.getImage("butRetourOver"));
+		butRetour.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		listeElement = ResourceManager.getImage("listeElement");
 		listeElementOver = ResourceManager.getImage("listeElementOver");
 		
-		butFullscreen = new MouseOverArea(container, ResourceManager.getImage("fullscreen"), 50, 50, 150, 50);
-		butFullscreen.setMouseOverImage(ResourceManager.getImage("fullscreenOver"));
+		butFullscreen = new MouseOverArea(container, ResourceManager.getImage("butFullscreen"), 50, 50, larg, haut);
+		//butFullscreen.setMouseOverImage(ResourceManager.getImage("butFullscreenOver"));
 		butFullscreen.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
-		butSonActi = new MouseOverArea(container, ResourceManager.getImage("activer"), 50, 250, 150, 50);
-		butSonActi.setMouseOverImage(ResourceManager.getImage("activerOver"));
-		butSonDesacti = new MouseOverArea(container, ResourceManager.getImage("desactiver"), 50, 250, 150, 50);
-		butSonDesacti.setMouseOverImage(ResourceManager.getImage("desactiverOver"));
+		butSonActi = new MouseOverArea(container, ResourceManager.getImage("butActiver"), 50, 250, larg, haut);
+		//butSonActi.setMouseOverImage(ResourceManager.getImage("activerOver"));
+		butSonDesacti = new MouseOverArea(container, ResourceManager.getImage("butDesactiver"), 50, 250, larg, haut);
+		//butSonDesacti.setMouseOverImage(ResourceManager.getImage("desactiverOver"));
 		butSonDesacti.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		listeDerTailleScreen = new ListeDeroulante((AppGameContainer)container, ResourceManager.getImage("listeDeroulante").getScaledCopy(150, 40), 250, 55);
@@ -90,21 +96,22 @@ public class OptionsView extends View {
 		listeDerTailleScreen.chercherElementUsed();
 		listeDerTailleScreen.applyImageOverAllElement(listeElementOver);
 		
-		sliderMusic = new Slider(container, ResourceManager.getImage("slider"), ResourceManager.getImage("sliderCursor"), zoneX1, 190, Configuration.getMusicVolume(), 0, 1, true);
+		sliderMusic = new Slider(container, ResourceManager.getImage("slider"), ResourceManager.getImage("sliderCursor"), zoneX1+80, 190, Configuration.getMusicVolume(), 0, 1, true);
 		sliderMusic.getCursor().setMouseOverImage( ResourceManager.getImage("sliderCursorOver"));
 		
-		sliderSound = new Slider(container, ResourceManager.getImage("slider"), ResourceManager.getImage("sliderCursor"), zoneX1, 250, Configuration.getSoundVolume(), 0, 1, true);
+		sliderSound = new Slider(container, ResourceManager.getImage("slider"), ResourceManager.getImage("sliderCursor"), zoneX1+80, 250, Configuration.getSoundVolume(), 0, 1, true);
 		sliderMusic.getCursor().setMouseOverImage( ResourceManager.getImage("sliderCursorOver"));
 
-		textPseudo = new TextField(container, container.getDefaultFont(), zoneX2, 100, 170, 22);
+		textPseudo = new TextField(container, container.getDefaultFont(), zoneX2+MARGIN, 100, 170, 22);
 		textPseudo.setBackgroundColor(Color.darkGray);
-		textPseudo.setText(Configuration.getPseudo());*/
+		textPseudo.setText(Configuration.getPseudo());
+		//*/
 	}
 
 	
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-		/*
+		//*
 		g.drawImage(background, 0, 0);
 		g.setDrawMode(Graphics.MODE_COLOR_MULTIPLY);
 		for(int iii=0;iii<3;iii++){
@@ -127,12 +134,14 @@ public class OptionsView extends View {
 		
 		textPseudo.render(container, g);
 		
+		g.drawString("Musique :", butSonActi.getX(), butSonActi.getY()-32);
 		if(Configuration.isMusicOn())
 			butSonDesacti.render(container, g);
 		else
 			butSonActi.render(container, g);
 		
-		butQuitter.render(container, g);*/
+		butRetour.render(container, g);
+		
 		super.render(container, game, g);
 	}
 	
@@ -151,7 +160,7 @@ public class OptionsView extends View {
 		super.mouseReleased(but, x, y);
 		
 		
-		if(butQuitter.isMouseOver()){
+		if(butRetour.isMouseOver()){
 			enregistrerPseudo();
 			gotoPreviousView();
 		}
@@ -159,18 +168,12 @@ public class OptionsView extends View {
 			inverseFullscreen();
 		if(butSonDesacti.isMouseOver()){
 			if(Configuration.isMusicOn()){
-				Configuration.setMusicOn(false);/*
-				m.instruction = MessageKey.I_STOP_MUSIC;
-				m.engine = EngineManager.SOUND_ENGINE;
-				engineManager.receiveMessage(m);*/
+				Configuration.setMusicOn(false);
+				GameMusic.stopMainTheme();
 			}else{	//(butSonActi.isMouseOver())
-				Configuration.setMusicOn(true);/*
-				m.instruction = MessageKey.I_PLAY_MUSIC;
-				// TODO donner le nom de la musique a jouer
-				m.s_data.put(MessageKey.P_NAME, "tron");
-				
-				m.engine = EngineManager.SOUND_ENGINE;
-				engineManager.receiveMessage(m);*/
+				Configuration.setMusicOn(true);
+				GameMusic.setMusicVolume(Configuration.getMusicVolume());
+				GameMusic.loopMainTheme();
 			}
 		}
 		
@@ -178,12 +181,9 @@ public class OptionsView extends View {
 		
 		if(sliderMusic.mouseReleased()){
 			Configuration.setMusicVolume(sliderMusic.getValuePrecision2());
-			/*float temp1 = GameMusic.getMusicPosition();
+			float temp1 = GameMusic.getMusicPosition();
 			GameMusic.setMusicVolume(sliderMusic.getValuePrecision2());
-			GameMusic.setMusicPostion(temp1);//*//*
-			m.instruction = MessageKey.I_CHANGE_VOLUME_MUSIC;
-			m.engine = EngineManager.SOUND_ENGINE;
-			engineManager.receiveMessage(m);*/
+			GameMusic.setMusicPostion(temp1);
 		}
 		
 		if(sliderSound.mouseReleased()){

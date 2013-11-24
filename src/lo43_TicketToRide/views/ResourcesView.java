@@ -55,8 +55,8 @@ public class ResourcesView extends View {
 		
 		
 		// Init Music and Sounds
+		GameMusic.initMainTheme();
 		if(Configuration.isMusicOn()){
-			GameMusic.initMainTheme();
 			GameMusic.setMusicVolume(Configuration.getMusicVolume());
 			GameMusic.loopMainTheme();
 		}

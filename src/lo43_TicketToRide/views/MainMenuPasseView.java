@@ -27,21 +27,10 @@ import lo43_TicketToRide.utils.ResourceManager;
  */
 public class MainMenuPasseView extends MainMenuView {
 	
-	//private MouseOverArea ;
-	
 
 	@Override
 	public void initResources() {
 		super.initResources();
-		
-		Image tmp = ResourceManager.getImage("transparent");
-		
-		int larg = tmp.getWidth();
-		int haut = tmp.getHeight();
-		
-		int x = container.getWidth() / 2 - larg/2;
-		int y = container.getHeight() / 2 - haut/2 * 4;
-		
 		
 		
 	}

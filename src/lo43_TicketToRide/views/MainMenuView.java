@@ -105,7 +105,7 @@ public abstract class MainMenuView extends View {
 		textFieldPseudo[0].setText(Configuration.getPseudo());
 		
 		// *******************
-		// render fait dans les classes filles
+		// render fait dans les classes filles et la gestion aussi
 		tmp = ResourceManager.getImage("lancerGame");
 		larg = tmp.getWidth();
 		haut = tmp.getHeight();
