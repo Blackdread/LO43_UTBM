@@ -13,6 +13,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lo43_TicketToRide.engine.Game;
+import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.utils.Colors;
 import lo43_TicketToRide.utils.Configuration;
 import lo43_TicketToRide.utils.ResourceManager;
@@ -35,15 +36,13 @@ public abstract class MainMenuView extends View {
 	private Image background;
 	protected MouseOverArea butSolo, butPasseEtJoue, butMulti, butOption, butQuitter, butCredits, butRetour;
 
-	// max 5 joueurs
-	protected final int NB_MAX_JOUEUR = 5;
-	protected boolean isIA[] = new boolean[NB_MAX_JOUEUR];
-	protected MouseOverArea[] switchIA = new MouseOverArea[NB_MAX_JOUEUR];
+	protected boolean isIA[] = new boolean[Regles.NB_MAX_JOUEUR];
+	protected MouseOverArea[] switchIA = new MouseOverArea[Regles.NB_MAX_JOUEUR];
 	
-	protected TextField[] textFieldPseudo = new TextField[NB_MAX_JOUEUR];
+	protected TextField[] textFieldPseudo = new TextField[Regles.NB_MAX_JOUEUR];
 	
 	// Donner peut-etre la possibiliter au joueur de changer la couleur
-	protected int[] colors = new int[NB_MAX_JOUEUR];
+	protected int[] colors = new int[Regles.NB_MAX_JOUEUR];
 	
 	// render fait dans les classes filles
 	protected MouseOverArea butLancerGame;
@@ -61,41 +60,42 @@ public abstract class MainMenuView extends View {
 		int y = container.getHeight() / 4 - haut/2;
 		
 		butSolo = new MouseOverArea(container, ResourceManager.getImage("butSolo"), x, y, larg, haut);
-		//butSolo.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butSolo.setMouseOverImage(ResourceManager.getImage("butSoloOver"));
 		butSolo.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		butMulti = new MouseOverArea(container, ResourceManager.getImage("butMulti"), x + larg + margin, y, larg, haut);
-		//butMulti.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butMulti.setMouseOverImage(ResourceManager.getImage("butMultiOver"));
 		butMulti.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		butPasseEtJoue = new MouseOverArea(container, ResourceManager.getImage("butPasseEtJoue"), x + (larg + margin)*2, y, larg, haut);
+		butPasseEtJoue.setMouseOverImage(ResourceManager.getImage("butPasseEtJoueOver"));
 		butPasseEtJoue.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		
 		
 		butCredits = new MouseOverArea(container, ResourceManager.getImage("butCredits"), 50, container.getHeight() - 50 - haut, larg, haut);
-		//butCredits.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butCredits.setMouseOverImage(ResourceManager.getImage("butCreditsOver"));
 		butCredits.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		butOption = new MouseOverArea(container, ResourceManager.getImage("butOption"), 50 + larg + margin, container.getHeight() - 50 - haut, larg, haut);
-		//butOption.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butOption.setMouseOverImage(ResourceManager.getImage("butOptionOver"));
 		butOption.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		butQuitter = new MouseOverArea(container, ResourceManager.getImage("butQuitter"), 50 + 2*(larg + margin), container.getHeight() - 50 - haut, larg, haut);
-		//butQuitter.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butQuitter.setMouseOverImage(ResourceManager.getImage("butQuitterOver"));
 		butQuitter.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		
 		
 		butRetour = new MouseOverArea(container, ResourceManager.getImage("butRetour"), 50, 70, larg, haut);
-		//butRetour.setMouseOverImage(ResourceManager.getImage("transparent"));
+		butRetour.setMouseOverImage(ResourceManager.getImage("butRetourOver"));
 		butRetour.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		tmp = ResourceManager.getImage("switchOFF");
 		int larg2 = tmp.getWidth();
 		haut = tmp.getHeight();
 		
-		for(int i=0;i<NB_MAX_JOUEUR;++i){
+		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
 			switchIA[i] = new MouseOverArea(container, tmp, x - larg2 - margin + i*(larg+margin)+20, y + haut + 10, larg2, haut);
 			textFieldPseudo[i] = new TextField(container, container.getDefaultFont(), x - larg2 - margin + i*(larg+margin), y + haut*2 + 30, larg, 20);
 			textFieldPseudo[i].setText("IA"+i);
@@ -111,7 +111,7 @@ public abstract class MainMenuView extends View {
 		haut = tmp.getHeight();
 		
 		butLancerGame = new MouseOverArea(container, tmp, container.getWidth() - larg - 50, container.getHeight()-haut-50, larg, haut);
-		//butLancerGame.setMouseOverImage(ResourceManager.getImage("transparent"));
+		//butLancerGame.setMouseOverImage(ResourceManager.getImage("butLancerGameOver"));
 		butLancerGame.setMouseDownSound(ResourceManager.getSound("butClick"));
 		// *******************
 	}
@@ -177,7 +177,7 @@ public abstract class MainMenuView extends View {
 	
 	protected void afficherCouleur(Graphics g){
 		g.drawString("Couleur :", textFieldPseudo[0].getX() - 80, textFieldPseudo[0].getY()+40);
-		for(int i=0;i<NB_MAX_JOUEUR;++i){
+		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
 			g.setColor(Colors.getColor(colors[i]));
 			g.fillOval(textFieldPseudo[i].getX()+40, textFieldPseudo[i].getY()+40, 20, 20); 
 		}
@@ -185,21 +185,21 @@ public abstract class MainMenuView extends View {
 	
 	protected void afficherPseudo(Graphics g){
 		g.drawString("Pseudo :", textFieldPseudo[0].getX() - 80, textFieldPseudo[0].getY());
-		for(int i=0;i<NB_MAX_JOUEUR;++i){
+		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
 			textFieldPseudo[i].render(container, g);
 		}
 	}
 	
 	protected void afficherSwitchIA(Graphics g){
 		g.drawString("IA :", switchIA[0].getX() - 100, switchIA[0].getY()+20);
-		for(int i=0;i<NB_MAX_JOUEUR;++i){
+		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
 			switchIA[i].render(container, g);
 			//g.drawString(""+isIA[i], switchIA[i].getX(), switchIA[i].getY() + 20);
 		}
 	}
 	
 	protected void switchIA(){
-		for(int i=0;i<NB_MAX_JOUEUR;++i)
+		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i)
 			if(switchIA[i].isMouseOver()){
 				if(isIA[i] == false){
 					switchIA[i].setNormalImage(ResourceManager.getImage("switchON"));

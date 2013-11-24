@@ -32,7 +32,7 @@ public class MainMenuPasseView extends MainMenuView {
 	public void initResources() {
 		super.initResources();
 		
-		
+		butPasseEtJoue.setNormalImage(ResourceManager.getImage("butPasseEtJoueOver"));
 	}
 	
 	@Override

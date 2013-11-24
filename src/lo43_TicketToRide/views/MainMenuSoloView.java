@@ -25,7 +25,7 @@ public class MainMenuSoloView extends MainMenuView {
 	public void initResources() {
 		super.initResources();
 		
-		
+		butSolo.setNormalImage(ResourceManager.getImage("butSoloOver"));
 	}
 	
 	@Override

@@ -65,20 +65,20 @@ public class OptionsView extends View {
 		int haut = tmp.getHeight();
 		
 		butRetour = new MouseOverArea(container, tmp, container.getWidth()/10, container.getHeight()-container.getHeight()/10 - 40, larg, haut);
-		//butRetour.setMouseOverImage(ResourceManager.getImage("butRetourOver"));
+		butRetour.setMouseOverImage(ResourceManager.getImage("butRetourOver"));
 		butRetour.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		listeElement = ResourceManager.getImage("listeElement");
 		listeElementOver = ResourceManager.getImage("listeElementOver");
 		
 		butFullscreen = new MouseOverArea(container, ResourceManager.getImage("butFullscreen"), 50, 50, larg, haut);
-		//butFullscreen.setMouseOverImage(ResourceManager.getImage("butFullscreenOver"));
+		butFullscreen.setMouseOverImage(ResourceManager.getImage("butFullscreenOver"));
 		butFullscreen.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		butSonActi = new MouseOverArea(container, ResourceManager.getImage("butActiver"), 50, 250, larg, haut);
-		//butSonActi.setMouseOverImage(ResourceManager.getImage("activerOver"));
+		butSonActi.setMouseOverImage(ResourceManager.getImage("butActiverOver"));
 		butSonDesacti = new MouseOverArea(container, ResourceManager.getImage("butDesactiver"), 50, 250, larg, haut);
-		//butSonDesacti.setMouseOverImage(ResourceManager.getImage("desactiverOver"));
+		butSonDesacti.setMouseOverImage(ResourceManager.getImage("butDesactiverOver"));
 		butSonDesacti.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		listeDerTailleScreen = new ListeDeroulante((AppGameContainer)container, ResourceManager.getImage("listeDeroulante").getScaledCopy(150, 40), 250, 55);

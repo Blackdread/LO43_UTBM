@@ -62,7 +62,9 @@ public class ResourcesView extends View {
 		}
 		
 		ResourceManager.addImage("butJouer", "butJouer.png");
+		ResourceManager.addImage("butJouerOver", "butJouerOver.png");
 		ResourceManager.addImage("butRegle", "butRegle.png");
+		ResourceManager.addImage("butRegleOver", "butRegleOver.png");
 		
 		Image tmp = ResourceManager.getImage("butJouer");
 		
@@ -73,21 +75,14 @@ public class ResourcesView extends View {
 		int y = container.getHeight() / 2 - haut/2 * 4;
 		
 		butJouer = new MouseOverArea(container, tmp, x, y, larg, haut);
-		//butJouer.setMouseOverImage(ResourceManager.getImage(""));
+		butJouer.setMouseOverImage(ResourceManager.getImage("butJouerOver"));
 		butJouer.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		tmp = ResourceManager.getImage("butRegle");
 		butRegle = new MouseOverArea(container, tmp, x, y+haut+10, larg, haut);
-		//butRegle.setMouseOverImage(ResourceManager.getImage(""));
+		butRegle.setMouseOverImage(ResourceManager.getImage("butRegleOver"));
 		butRegle.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
-		/*
-		try {
-			background = new Image("resources/images/logo.png");
-		} catch (SlickException e) {
-			e.printStackTrace();
-		}
-		//*/
 		bar = new ProgressBarFillRect(2,8);
 		bar.setLocation(container.getWidth() / 2 - 100, 3*container.getHeight() / 4);
 		bar.setValue(40);

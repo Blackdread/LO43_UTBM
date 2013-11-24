@@ -8,9 +8,10 @@ package lo43_TicketToRide.engine.partie;
  */
 public class Ville {
   
-
-
   protected String nomUV;
 
-          
+  public Ville(Ville copy){
+	  nomUV = copy.nomUV;
+  }
+  
 }

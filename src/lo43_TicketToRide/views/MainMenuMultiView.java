@@ -13,6 +13,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lo43_TicketToRide.engine.Game;
+import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.utils.ResourceManager;
 
 
@@ -34,15 +35,9 @@ public class MainMenuMultiView extends MainMenuView {
 	public void initResources() {
 		super.initResources();
 		
-		Image tmp = ResourceManager.getImage("transparent");
+		butMulti.setNormalImage(ResourceManager.getImage("butMultiOver"));
 		
-		int larg = tmp.getWidth();
-		int haut = tmp.getHeight();
-		
-		int x = container.getWidth() / 2 - larg/2;
-		int y = container.getHeight() / 2 - haut/2 * 4;
-		
-		for(int i=0;i<NB_MAX_JOUEUR;++i)
+		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i)
 			super.textFieldPseudo[i].setAcceptingInput(false);
 		
 	}
