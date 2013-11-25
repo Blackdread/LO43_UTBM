@@ -10,6 +10,11 @@ public class Ville {
   
   protected String nomUV;
 
+  
+  public Ville(String nom){
+	  
+  }
+  
   public Ville(Ville copy){
 	  nomUV = copy.nomUV;
   }

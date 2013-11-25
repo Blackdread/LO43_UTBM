@@ -13,6 +13,9 @@ public class CarteWagon {
   public CarteWagon(){
 	  color = -1;
   }
+  public CarteWagon(int color){
+	  this.color = color;
+  }
   
   public CarteWagon(CarteWagon copy){
 	  color = copy.color;

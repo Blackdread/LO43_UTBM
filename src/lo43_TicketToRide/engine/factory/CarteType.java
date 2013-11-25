@@ -2,9 +2,9 @@ package lo43_TicketToRide.engine.factory;
 
 enum CarteType {
 
-  pink,
+  Pink,
 
-  white,
+  White,
 
   Blue,
 

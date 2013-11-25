@@ -13,6 +13,9 @@ import java.util.Vector;
 public class Joueur {
 
   protected String pseudo;
+  /**
+   * Unique par joueur (comme une id)
+   */
   protected int color;
   protected int score;
   protected int nbWagon;
@@ -21,12 +24,12 @@ public class Joueur {
    * 
    * @element-type Challenge
    */
-  protected Vector<Challenge>  challenges;
+  protected Vector<Challenge>  challenges = new Vector<Challenge>();
     /**
    * 
    * @element-type CarteWagon
    */
-  protected Vector<CarteWagon>  cartes;
+  protected Vector<CarteWagon>  cartes = new Vector<CarteWagon>();
   
   public Joueur(){
 	  
@@ -103,6 +106,11 @@ public class Joueur {
 	
 	synchronized public void setIA(boolean isIA) {
 		this.isIA = isIA;
+	}
+	
+	@Override
+	synchronized public boolean equals(Object a){
+		return ((Joueur)a).color == color;
 	}
    
 }

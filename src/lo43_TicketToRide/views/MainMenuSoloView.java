@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import lo43_TicketToRide.engine.Game;
+import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.utils.ResourceManager;
 
 
@@ -25,6 +26,7 @@ public class MainMenuSoloView extends MainMenuView {
 	public void initResources() {
 		super.initResources();
 		
+		super.textFieldPseudo[0].setAcceptingInput(false);
 		butSolo.setNormalImage(ResourceManager.getImage("butSoloOver"));
 	}
 	
@@ -66,6 +68,10 @@ public class MainMenuSoloView extends MainMenuView {
 		
 	}
 
+	@Override
+	protected void gotoLancerPartie(){
+		
+	}
 
 	@Override
 	public int getID() {

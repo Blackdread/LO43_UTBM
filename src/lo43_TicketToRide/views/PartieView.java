@@ -37,24 +37,12 @@ public abstract class PartieView extends View {
 	protected Rectangle[] shapeCarteRetournee = new Rectangle[Regles.NB_MAX_CARTE_RETOURNEE];
 	protected Rectangle[] shapeJoueur = new Rectangle[Regles.NB_MAX_JOUEUR];
 	
-	private Partie partie;
+	protected Partie partie;
+	
 	
 	@Override
 	public void initResources() {
 		background = ResourceManager.getImage("western").getScaledCopy(container.getWidth(), container.getHeight());
-		
-		/*
-		Image tmp = ResourceManager.getImage("");
-		int larg = tmp.getWidth();
-		int haut = tmp.getHeight();
-		int margin = 30;
-		
-		int x = container.getWidth() / 2 - larg/2 - margin * 3;
-		int y = container.getHeight() / 4 - haut/2;
-		//*/
-		//but = new MouseOverArea(container, ResourceManager.getImage(""), x, y, larg, haut);
-		//but.setMouseOverImage(ResourceManager.getImage(""));
-		//but.setMouseDownSound(ResourceManager.getSound("butClick"));
 		
 		int largCarte = 200;
 		int hautCarte = 100;
@@ -107,12 +95,6 @@ public abstract class PartieView extends View {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		
-		for(int i=0;i<Regles.NB_MAX_CARTE_RETOURNEE;++i)
-			if(shapeCarteRetournee[i].contains(x, y)){
-				// Demander ˆ piocher
-				
-				break;
-			}
 		
 	}
 	

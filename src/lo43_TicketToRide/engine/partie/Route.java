@@ -18,8 +18,11 @@ public class Route {
 	protected Ville ville1;
 	protected Ville ville2;
   
-	public Route(){
-		
+	public Route(Ville v1, Ville v2, int color, int wagon){
+		nbWagonNecessaire = wagon;
+		couleurNecessaireRoute = color;
+		ville1 = v1;
+		ville2 = v2;
 	}
 	
 	public Route(Route copy) {
@@ -31,8 +34,22 @@ public class Route {
 	}
 
 
-	public void ajouterPossesseur(Joueur joueur) {
-		
+	public boolean ajouterPossesseur(Joueur joueur) {
+		if(possederPar == null){
+			possederPar = joueur;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @return true si un joueur a possede la route
+	 */
+	public boolean isRoutePosseder(){
+		if(possederPar == null)
+			return false;
+		return true;
 	}
 
 }

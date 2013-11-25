@@ -111,7 +111,7 @@ public abstract class MainMenuView extends View {
 		haut = tmp.getHeight();
 		
 		butLancerGame = new MouseOverArea(container, tmp, container.getWidth() - larg - 50, container.getHeight()-haut-50, larg, haut);
-		//butLancerGame.setMouseOverImage(ResourceManager.getImage("butLancerGameOver"));
+		butLancerGame.setMouseOverImage(ResourceManager.getImage("lancerGameOver"));
 		butLancerGame.setMouseDownSound(ResourceManager.getSound("butClick"));
 		// *******************
 	}
@@ -190,16 +190,23 @@ public abstract class MainMenuView extends View {
 		}
 	}
 	
+	/**
+	 * Le 1er slot pour le joueur est forcement un joueur et non pas une IA
+	 * @param g
+	 */
 	protected void afficherSwitchIA(Graphics g){
 		g.drawString("IA :", switchIA[0].getX() - 100, switchIA[0].getY()+20);
-		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i){
 			switchIA[i].render(container, g);
-			//g.drawString(""+isIA[i], switchIA[i].getX(), switchIA[i].getY() + 20);
+			//g.drawString(""+isIA[i], switchIA[i].getX(), switchIA[i].getY() + 30);
 		}
 	}
 	
+	/**
+	 * Le 1er slot pour le joueur est forcement un joueur et non pas une IA
+	 */
 	protected void switchIA(){
-		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i)
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
 			if(switchIA[i].isMouseOver()){
 				if(isIA[i] == false){
 					switchIA[i].setNormalImage(ResourceManager.getImage("switchON"));
@@ -248,7 +255,10 @@ public abstract class MainMenuView extends View {
 		container.setMouseGrabbed(false);
 		game.enterState(Game.LAST_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 	}
-
+	
+	protected abstract void gotoLancerPartie();
+	
+	
 	@Override
 	public int getID() {
 		return Game.MAIN_MENU_VIEW_ID;

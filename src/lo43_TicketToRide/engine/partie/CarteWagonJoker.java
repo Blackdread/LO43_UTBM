@@ -8,6 +8,9 @@ package lo43_TicketToRide.engine.partie;
  */
 public class CarteWagonJoker extends CarteWagon {
 	
+	public CarteWagonJoker(){
+		
+	}
 	
 	public CarteWagonJoker(CarteWagonJoker copy){
 		super(copy);

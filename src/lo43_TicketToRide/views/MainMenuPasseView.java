@@ -32,6 +32,7 @@ public class MainMenuPasseView extends MainMenuView {
 	public void initResources() {
 		super.initResources();
 		
+		super.textFieldPseudo[0].setAcceptingInput(false);
 		butPasseEtJoue.setNormalImage(ResourceManager.getImage("butPasseEtJoueOver"));
 	}
 	
@@ -70,7 +71,11 @@ public class MainMenuPasseView extends MainMenuView {
 		
 		super.switchIA();
 	}
-
+	
+	@Override
+	protected void gotoLancerPartie(){
+		
+	}
 
 	@Override
 	public int getID() {

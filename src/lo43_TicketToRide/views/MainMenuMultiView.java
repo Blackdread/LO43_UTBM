@@ -77,6 +77,10 @@ public class MainMenuMultiView extends MainMenuView {
 		
 		
 	}
+	@Override
+	protected void gotoLancerPartie(){
+		
+	}
 
 
 	@Override
