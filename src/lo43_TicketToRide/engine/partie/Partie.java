@@ -55,7 +55,13 @@ public class Partie implements IUpdatable {
   /*
    * Possibilités lors d'un tour
    */
+  /**
+   * Max 2
+   */
   protected int compteurCarteDeckPiocher = 0;
+  /**
+   * Max 2
+   */
   protected int compteurCarteRetourneePiocher = -11110;
   protected boolean carteChallengesPiocher = false;
   protected boolean routePoser = false;
@@ -250,6 +256,12 @@ public class Partie implements IUpdatable {
 	  remettreDansDeckCarteDeLaDefausse();
   }
   
+  synchronized public Vector<Challenge> copierChallengePourSelectionnerCeuxAPiocher(){
+	  Vector<Challenge> cha = new Vector<Challenge>(3);
+	  for(int i=0;i<3 && i< challenges.size();++i)
+		  cha.add(new Challenge(challenges.get(0)));
+	return cha;
+  }
   /**
    * Ajoute les challenges au tourDuJoueur et remet au bas du deck les challenges non pris
    * On sait qu'il y a forcement 1 challenge de pris obligatoirement
@@ -320,8 +332,9 @@ public class Partie implements IUpdatable {
 	  if(pos >= 0 && pos < carteRetournee.size()){
 		  // Etrange d'etre oblige de faire ca...
 		  // En faite c'est logique car je fais un new et CarteWagonJoker herite de CarteWagon donc il peut
-		  // etre transformer en CarteWagon et perdre son etat de CarteWagonJoker
+		  // etre transformer en CarteWagon et perdre son "instance" de CarteWagonJoker
 		  // TODO voir avec prof pour eviter d'etre oblige de faire ca
+		  // carteRetournee.get(pos).getClass().newInstance() => c'est peut etre ca
 		  if(carteRetournee.get(pos) instanceof CarteWagonJoker)
 			  return new CarteWagonJoker((CarteWagonJoker) carteRetournee.get(pos));
 		  return new CarteWagon(carteRetournee.get(pos));

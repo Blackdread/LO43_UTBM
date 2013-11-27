@@ -18,5 +18,11 @@ public class Ville {
   public Ville(Ville copy){
 	  nomUV = copy.nomUV;
   }
+
+	public String getNomUV() {
+		return nomUV;
+	}
+  
+  
   
 }

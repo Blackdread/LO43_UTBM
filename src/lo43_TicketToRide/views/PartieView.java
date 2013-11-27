@@ -1,5 +1,7 @@
 package lo43_TicketToRide.views;
 
+import java.util.Vector;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -15,6 +17,7 @@ import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.engine.factory.CarteType;
 import lo43_TicketToRide.engine.partie.CarteWagon;
 import lo43_TicketToRide.engine.partie.CarteWagonJoker;
+import lo43_TicketToRide.engine.partie.Challenge;
 import lo43_TicketToRide.engine.partie.Joueur;
 import lo43_TicketToRide.engine.partie.Partie;
 import lo43_TicketToRide.utils.Colors;
@@ -47,7 +50,7 @@ public abstract class PartieView extends View {
 	 */
 	protected boolean partieEnCours = false;
 	protected Partie partie;
-	
+	protected boolean afficherSelectionChallenge = false;
 	
 	@Override
 	public void initResources() {
@@ -159,6 +162,26 @@ public abstract class PartieView extends View {
 			
 			g.drawString("Nb chall:    "+tmp.getChallenges().size(), shapeJoueur[i].getX() + 2, shapeJoueur[i].getY()+63);
 			g.drawString("Nb carte:    "+tmp.getCartes().size(), shapeJoueur[i].getX() + 2, shapeJoueur[i].getY()+75);
+		}
+	}
+	
+	protected void afficherChallengesPourLesPiocher(Graphics g){
+		Vector<Challenge> challenge = partie.copierChallengePourSelectionnerCeuxAPiocher();
+		int i=0, larg=150;
+		for(Challenge v : challenge){
+			if(v!=null){
+				// TODO remplacer par des shape
+				g.setColor(Color.magenta);
+				g.fillRoundRect(200+i*larg+i*10, rectCarteJeu.getY()+10, larg, 50, 8);
+				
+				g.setColor(Color.black);
+				g.drawString("Points "+v.getPoints(), 200+i*larg+i*10 + 40, rectCarteJeu.getY()+12);
+				g.drawString(""+v.getDepart().getNomUV(), 200+i*larg+i*10 + 40, rectCarteJeu.getY()+27);
+				g.drawString(""+v.getArrivee().getNomUV(), 200+i*larg+i*10 + 40, rectCarteJeu.getY()+42);
+				
+				g.drawRoundRect(200+i*larg+i*10, rectCarteJeu.getY()+10, larg, 50, 8);
+				i+=1;
+			}
 		}
 	}
 	

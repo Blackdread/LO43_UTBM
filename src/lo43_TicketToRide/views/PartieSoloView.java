@@ -4,12 +4,9 @@ import lo43_TicketToRide.engine.Game;
 import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.engine.partie.Joueur;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 public final class PartieSoloView extends PartieView {
@@ -34,6 +31,9 @@ public final class PartieSoloView extends PartieView {
 		
 		afficherInfoPersoJoueur(g,partie.getJoueurAt(0).getColor());
 		
+		if(afficherSelectionChallenge)
+			afficherChallengesPourLesPiocher(g);
+		
 	}
 	
 	@Override
@@ -52,6 +52,15 @@ public final class PartieSoloView extends PartieView {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
+		
+		if(butDeckChallenge.isMouseOver()){
+			// TODO
+			afficherSelectionChallenge = !afficherSelectionChallenge;
+		}else if(butDeckWagon.isMouseOver()){
+			Joueur tmp = partie.getTourDuJoueur();
+			if(!tmp.isIA())
+				partie.piocherCarteDeck();
+		}
 		
 		for(int i=0;i<Regles.NB_MAX_CARTE_RETOURNEE;++i)
 			if(shapeCarteRetournee[i].contains(x, y)){

@@ -8,7 +8,7 @@ public class GameMusic {
 
 	public static void initMainTheme() {
 		try {
-			mainTheme = new Music("resources/musics/SwirlofDust.wav");
+			mainTheme = new Music("resources/musics/GameOfThrones.wav");
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}

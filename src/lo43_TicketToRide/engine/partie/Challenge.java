@@ -8,7 +8,7 @@ package lo43_TicketToRide.engine.partie;
  */
 public class Challenge {
 	
-	protected Integer points;
+	protected int points;
 
 	protected Ville arrivee;
 	protected Ville depart;
@@ -24,6 +24,19 @@ public class Challenge {
 		arrivee = new Ville(copy.arrivee);
 		depart = new Ville(copy.depart);
 	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public Ville getArrivee() {
+		return arrivee;
+	}
+
+	public Ville getDepart() {
+		return depart;
+	}
+	
 	
 
 }
