@@ -1,5 +1,7 @@
 package lo43_TicketToRide.engine.partie;
 
+import lo43_TicketToRide.utils.Colors;
+
 /**
  * 
  * @author Yoann CAPLAIN
@@ -9,7 +11,7 @@ package lo43_TicketToRide.engine.partie;
 public class CarteWagonJoker extends CarteWagon {
 	
 	public CarteWagonJoker(){
-		
+		super.color = Colors.GRIS;
 	}
 	
 	public CarteWagonJoker(CarteWagonJoker copy){

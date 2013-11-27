@@ -4,13 +4,17 @@ import lo43_TicketToRide.engine.Game;
 import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.engine.partie.Joueur;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 public final class PartieSoloView extends PartieView {
 
+	
 	@Override
 	public void initResources() {
 		super.initResources();
@@ -28,6 +32,7 @@ public final class PartieSoloView extends PartieView {
 	public void render(GameContainer container, StateBasedGame sbgame, Graphics g) throws SlickException {
 		super.render(container, sbgame, g);
 		
+		afficherInfoPersoJoueur(g,partie.getJoueurAt(0).getColor());
 		
 	}
 	

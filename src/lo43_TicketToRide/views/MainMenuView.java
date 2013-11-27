@@ -1,5 +1,7 @@
 package lo43_TicketToRide.views;
 
+import java.util.Vector;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -14,6 +16,11 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lo43_TicketToRide.engine.Game;
 import lo43_TicketToRide.engine.Regles;
+import lo43_TicketToRide.engine.factory.FactoryCarteJeu;
+import lo43_TicketToRide.engine.factory.FactoryChallenges;
+import lo43_TicketToRide.engine.factory.FactoryPartie;
+import lo43_TicketToRide.engine.partie.Joueur;
+import lo43_TicketToRide.engine.partie.Partie;
 import lo43_TicketToRide.utils.Colors;
 import lo43_TicketToRide.utils.Configuration;
 import lo43_TicketToRide.utils.ResourceManager;
@@ -37,6 +44,7 @@ public abstract class MainMenuView extends View {
 	protected MouseOverArea butSolo, butPasseEtJoue, butMulti, butOption, butQuitter, butCredits, butRetour;
 
 	protected boolean isIA[] = new boolean[Regles.NB_MAX_JOUEUR];
+	protected boolean isJoueur[] = new boolean[Regles.NB_MAX_JOUEUR];
 	protected MouseOverArea[] switchIA = new MouseOverArea[Regles.NB_MAX_JOUEUR];
 	
 	protected TextField[] textFieldPseudo = new TextField[Regles.NB_MAX_JOUEUR];
@@ -114,6 +122,8 @@ public abstract class MainMenuView extends View {
 		butLancerGame.setMouseOverImage(ResourceManager.getImage("lancerGameOver"));
 		butLancerGame.setMouseDownSound(ResourceManager.getSound("butClick"));
 		// *******************
+		
+		isJoueur[0] = true;
 	}
 	
 	@Override
@@ -173,6 +183,8 @@ public abstract class MainMenuView extends View {
 			gotoJouerPasseEtJoue();
 		else if(butRetour.isMouseOver())
 			gotoResource();
+		else if(butLancerGame.isMouseOver())
+			gotoLancerPartie();
 	}
 	
 	protected void afficherCouleur(Graphics g){
@@ -256,7 +268,41 @@ public abstract class MainMenuView extends View {
 		game.enterState(Game.LAST_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 	}
 	
-	protected abstract void gotoLancerPartie();
+	protected abstract int nbJoueur();
+	
+	/**
+	 * Sera surement defini dans MainMenuView et c'est seulement MainMenuMultiView qui change la facon de faire
+	 */
+	protected void gotoLancerPartie(){
+		Vector<Joueur> joueur = new Vector<Joueur>(nbJoueur());
+		
+		// Ajout des joueurs
+		joueur.add(new Joueur(textFieldPseudo[0].getText(), colors[0],false));
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
+			if(isJoueur[i] || isIA[i])
+				joueur.add(new Joueur(textFieldPseudo[i].getText(), colors[i],isIA[i]));
+		
+		//if(joueur.size() > 1){
+			// Creation de la partie
+			Partie partie = FactoryPartie.getInstance().creerPartie(joueur);
+			// Ajout de la carte de jeu
+			partie.setCarteJeu(FactoryCarteJeu.getInstance().creerCarteJeu());
+			
+			// Creation et Ajout des cartes wagons
+			// Fait dans FactoryPartie
+			
+			// Creation et Ajout des challenges
+			partie.ajouterChallenge(FactoryChallenges.getInstance().creerChallenges(partie.getCarteJeu(), 0));
+			
+			partie.initialiserPartie();
+			
+			// Rejoindre la partie
+			((PartieView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(partie);
+			
+			container.setMouseGrabbed(false);
+			game.enterState(Game.PARTIE_SOLO_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+		//}
+	}
 	
 	
 	@Override

@@ -13,7 +13,7 @@ public class FactoryCarteJeu {
 	  
   }
   
-  public FactoryCarteJeu getInstance(){
+  public static FactoryCarteJeu getInstance(){
 	  if(factory == null)
 		  factory = new FactoryCarteJeu();
 	  return factory;
@@ -25,10 +25,11 @@ public class FactoryCarteJeu {
    * @return
    */
   public CarteJeu creerCarteJeu() {
-	  //switch(carte){
-  	  //}
 	  CarteJeu ret = new CarteJeu();
-	  
+	  //switch(numCarte){
+  	  
+	 
+	  //default:
 	  for(int i=0;i<13;++i)
 		  ret.ajouterVille(new Ville("ville"+i));
 	  
@@ -51,8 +52,7 @@ public class FactoryCarteJeu {
 	  ret.ajouterRoute(new Route(ret.getVilleAt(9), ret.getVilleAt(5), 0, 3));
 	  
 	  ret.ajouterRoute(new Route(ret.getVilleAt(5), ret.getVilleAt(1), 0, 4));
-	  
-	  
+	//}
 	  return ret;
   }
 

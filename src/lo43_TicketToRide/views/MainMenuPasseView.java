@@ -82,4 +82,5 @@ public class MainMenuPasseView extends MainMenuView {
 		return Game.MAIN_MENU_PASSE_ET_JOUE_VIEW_ID;
 	}
 
+
 }

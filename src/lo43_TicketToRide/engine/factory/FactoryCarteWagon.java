@@ -10,7 +10,7 @@ public class FactoryCarteWagon {
 
   private FactoryCarteWagon(){}
   
-  public FactoryCarteWagon getInstance(){
+  public static FactoryCarteWagon getInstance(){
 	  if(factory == null)
 		  factory = new FactoryCarteWagon();
 	  return factory;

@@ -2,7 +2,6 @@ package lo43_TicketToRide.views;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -67,11 +66,35 @@ public class MainMenuSoloView extends MainMenuView {
 		super.switchIA();
 		
 	}
-
+	
+	@Override
+	protected int nbJoueur(){
+		int somme = 1;
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
+				if(isIA[i])
+					somme+=1;
+		return somme;
+	}
+	
+	/* Remonter sur classe mere
 	@Override
 	protected void gotoLancerPartie(){
 		
-	}
+		Vector<Joueur> joueur = new Vector<Joueur>(nbJoueur());
+		
+		// Ajout des joueurs
+		joueur.add(new Joueur(textFieldPseudo[0].getText(), colors[0],false));
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
+			joueur.add(new Joueur(textFieldPseudo[i].getText(), colors[i],isIA[i]));
+		
+		// Creation de la partie
+		Partie partie = FactoryPartie.getInstance().creerPartie(joueur);
+		// Ajout de la carte de jeu
+		partie.setCarteJeu(FactoryCarteJeu.getInstance().creerCarteJeu());
+		
+		// Creation et Ajout des cartes wagons
+		
+	}*/
 
 	@Override
 	public int getID() {

@@ -2,6 +2,8 @@ package lo43_TicketToRide.engine.partie;
 
 import java.util.Vector;
 
+import lo43_TicketToRide.engine.Regles;
+
 
 
 /**
@@ -18,7 +20,7 @@ public class Joueur {
    */
   protected int color;
   protected int score;
-  protected int nbWagon;
+  protected int nbWagon = Regles.NB_WAGON_PAR_JOUEUR;
   protected boolean isIA;
    /**
    * 
@@ -31,18 +33,29 @@ public class Joueur {
    */
   protected Vector<CarteWagon>  cartes = new Vector<CarteWagon>();
   
-  public Joueur(){
-	  
+  public Joueur(String pseudo){
+	  super();
+	  this.pseudo = pseudo;
+	  isIA = false;
   }
   
+  
+  public Joueur(String pseudo, int color, boolean isIA) {
+	super();
+	this.pseudo = pseudo;
+	this.color = color;
+	this.isIA = isIA;
+  }
+
+
   public Joueur(final Joueur copy){
 	  pseudo = copy.pseudo;
 	  color = copy.color;
 	  score = copy.score;
 	  nbWagon = copy.nbWagon;
 	  isIA = copy.isIA;
-	  challenges = getChallenges();
-	  cartes = getCartes();
+	  challenges = copy.getChallenges();
+	  cartes = copy.getCartes();
   }
 
    synchronized public String getPseudo() {
@@ -63,6 +76,15 @@ public class Joueur {
 	
 	synchronized public boolean isIA() {
 		return isIA;
+	}
+	
+	synchronized public int compterNbCarteDeTelleCouleur(int color){
+		int somme=0;
+		for(int i=0;i<cartes.size();++i)
+			if(cartes.get(i).getColor() == color)
+				somme +=1;
+		return somme;
+		
 	}
 	
 	/**

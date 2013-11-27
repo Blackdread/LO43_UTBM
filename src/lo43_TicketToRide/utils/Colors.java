@@ -1,5 +1,7 @@
 package lo43_TicketToRide.utils;
 
+import lo43_TicketToRide.engine.factory.CarteType;
+
 import org.newdawn.slick.Color;
 /**
  * 
@@ -8,7 +10,7 @@ import org.newdawn.slick.Color;
  */
 public final class Colors {
 
-	public static final String[] COLORS = new String[] {"Yellow", "Red", "Green", "Blue", "Purple", "Pink", "Orange", "Cyan", "Blanc", "Noir"};
+	public static final String[] COLORS = new String[] {"Yellow", "Red", "Green", "Blue", "Purple", "Pink", "Orange", "Cyan", "Blanc", "Noir", "Gray"};
 	
 	public static enum Colorss{
 		Yellow, 
@@ -20,7 +22,8 @@ public final class Colors {
 		Orange, 
 		Cyan, 
 		Blanc, 
-		Noir
+		Noir,
+		Gray
 	}
 
 	public static final int YELLOW = 0;
@@ -34,6 +37,7 @@ public final class Colors {
 
 	public static final int BLANC = 8;
 	public static final int NOIR = 9;
+	public static final int GRIS = 10;
 
 	public static final Color PURPLE_COLOR = new Color(128, 0, 128);
 	public static final Color GOLD = new Color(255, 215, 0);
@@ -78,9 +82,36 @@ public final class Colors {
 			return Color.white;
 		case NOIR:
 			return Color.black;
+		case GRIS:
+			return Color.gray;
 		default:
 			return Color.gray;
 		}
+	}
+	
+	public static int getColorId(CarteType type){
+		switch(type){
+		  case Pink:
+			return Colors.PINK;
+		  case White:
+			return Colors.BLANC;
+		  case Blue:
+			return Colors.BLUE;
+		  case Yellow:
+			return Colors.YELLOW;
+		  case Orange:
+			return Colors.ORANGE;
+		  case Black:
+			  return Colors.NOIR;
+		  case Red:
+			  return Colors.RED;
+		  case Green:
+			  return Colors.GREEN;
+		  case Joker:
+			  return Colors.GRIS;
+		  default:
+			  return Colors.GRIS; 
+		  }
 	}
 
 }

@@ -28,7 +28,7 @@ public class Partie implements IUpdatable {
    * 
    * @element-type Challenge
    */
-  protected Vector<Challenge>  challenges = new Vector<Challenge>();
+  protected Vector<Challenge>  challenges = new Vector<Challenge>(Regles.NB_CARTE_CHALLENGE);
   protected CarteJeu carte;
    /**
    * 
@@ -39,7 +39,7 @@ public class Partie implements IUpdatable {
    * 
    * @element-type CarteWagon
    */
-  protected Vector<CarteWagon>  deckDeCarte = new Vector<CarteWagon>();
+  protected Vector<CarteWagon>  deckDeCarte = new Vector<CarteWagon>(Regles.NB_TOTAL_CARTE_WAGON_POUR_UNE_PARTIE);
   /**
    * 
    * @element-type CarteWagon
@@ -49,14 +49,14 @@ public class Partie implements IUpdatable {
    * 
    * @element-type CarteWagon
    */
-  protected Vector<CarteWagon> carteRetournee = new Vector<CarteWagon>();
+  protected Vector<CarteWagon> carteRetournee = new Vector<CarteWagon>(Regles.NB_MAX_CARTE_RETOURNEE);
   protected Joueur tourDuJoueur;
 
   /*
-   * Possibilités lors d'un tour
+   * Possibilit√©s lors d'un tour
    */
   protected int compteurCarteDeckPiocher = 0;
-  protected int compteurCarteRetourneePiocher = 0;
+  protected int compteurCarteRetourneePiocher = -11110;
   protected boolean carteChallengesPiocher = false;
   protected boolean routePoser = false;
   
@@ -67,22 +67,63 @@ public class Partie implements IUpdatable {
   
   @Override
   synchronized public void update(int delta) {
-	  tempsDeJeu.update(delta);
-	  tempsMaxParTour.update(delta);
+	  if(carte != null && tourDuJoueur != null){
+		  tempsDeJeu.update(delta);
+		  tempsMaxParTour.update(delta);
+	  }
 	  
 	  if(tempsMaxParTour.isTimeComplete()){
 		  tempsMaxParTour.resetTime();
 		  finTourJoueur();
 	  }
+	  
+	  checkFinTourJoueur();
 		  
   }
   
-  public Boolean isGameOver() {
-  return null;
+  /**
+   * Mettre les cartes retournees
+   * Donner les cartes challenges aux joueurs
+   * Donner les cartes wagon aux joueurs
+   * Initialiser  tourDuJoueur
+   */
+  synchronized public void initialiserPartie(){
+	  melangerDeckDeCarte();
+	  melangerChallenges();
+	  
+	  ajouterCarteManquanteRetournee();
+	  verifierNbCarteJokerRetournee();
+	  
+	  int tmp = challenges.size();
+	  if(tmp < vectJoueurs.size()*Regles.NB_CARTE_CHALLENGE_PAR_JOUEUR_DEBUT_PARTIE){
+		  System.err.println(" Pas assez de challenge !!");
+		  // On fait planter le jeu...
+	  }else{
+		  tmp = vectJoueurs.size();
+		  for(int k=0;k<Regles.NB_CARTE_CHALLENGE_PAR_JOUEUR_DEBUT_PARTIE;++k)
+			  for(int i=0;i<tmp;++i)
+				  vectJoueurs.get(i).ajouterChallenge(challenges.remove(0));
+	  }//*
+	  tmp = vectJoueurs.size();
+	  for(int k=0;k<Regles.NB_CARTE_WAGON_PAR_JOUEUR_DEBUT_PARTIE;++k)
+		  for(int i=0;i<tmp;++i)
+			  vectJoueurs.get(i).ajouterCarteWagon(deckDeCarte.remove(0));
+	  //*/
+	  System.out.println("vect "+vectJoueurs.get(0).pseudo+" "+vectJoueurs.get(0).getColor()+" taille "+
+			  vectJoueurs.get(0).getCartes().size());
+	  tourDuJoueur = vectJoueurs.get(0);
+  }
+  
+  public boolean isGameOver() {
+	  return false;// TODO
   }
 
   public void checkGameOver() {
-	  
+	  // TODO
+  }
+  
+  synchronized public final void setCarteJeu(CarteJeu carte){
+	  this.carte = carte;
   }
   
   /**
@@ -90,11 +131,32 @@ public class Partie implements IUpdatable {
    * @return a copy
    */
   synchronized public final Joueur getTourDuJoueur() {
+	  if(tourDuJoueur == null)
+		  return null;
 	  return new Joueur(tourDuJoueur);
+  }
+  
+  /**
+   * 
+   * @return a copy (pas pour le moment)
+   */
+  synchronized public CarteJeu getCarteJeu() {
+	 /* if(carte == null)
+		  return null;
+	  return new Joueur(carte);
+	  */
+	  return carte;
   }
 
   synchronized public final void ajouterJoueur(Joueur a){
 	  vectJoueurs.add(a);
+  }
+  
+  synchronized public final int getDeckSize(){
+	  return deckDeCarte.size();
+  }
+  synchronized public final int getDeckChallengeSize(){
+	  return challenges.size();
   }
   
   /**
@@ -103,6 +165,20 @@ public class Partie implements IUpdatable {
    */
   synchronized public final void ajouterChallenge(Challenge a){
 	  challenges.add(a);
+  }
+  synchronized public final void ajouterChallenge(Vector<Challenge> a){
+	  challenges.addAll(a);
+  }
+  
+  synchronized public final void ajouterCarteWagon(CarteWagon a){
+	  deckDeCarte.add(a);
+  }
+  
+  /**
+   * Verifie si le tour du joueur est fini si oui alors on passe au joueur suivant
+   */
+  synchronized private void checkFinTourJoueur(){
+	  
   }
   
   /**
@@ -119,6 +195,8 @@ public class Partie implements IUpdatable {
 	  compteurCarteRetourneePiocher = 0;
 	  carteChallengesPiocher = false;
 	  routePoser = false;
+	  
+	// TODO Verifier si fonction fini
   }
   
   /**
@@ -130,11 +208,12 @@ public class Partie implements IUpdatable {
 		  if(tourDuJoueur != null && compteurCarteDeckPiocher < 2 && compteurCarteRetourneePiocher < 2
 				  && !carteChallengesPiocher && !routePoser){
 			  
-			  defausse.add(deckDeCarte.get(0));
+			  //defausse.add(deckDeCarte.get(0));
 			  tourDuJoueur.ajouterCarteWagon(deckDeCarte.remove(0));
 			  compteurCarteDeckPiocher +=1;
 		  }
 	  }
+	  remettreDansDeckCarteDeLaDefausse();
   }
   
   /**
@@ -152,26 +231,29 @@ public class Partie implements IUpdatable {
 				  return;
 			  else{
 				  compteurCarteRetourneePiocher += 2;
-				  defausse.add(tmp);
+				  //defausse.add(tmp);
 				  tourDuJoueur.ajouterCarteWagon(carteRetournee.remove(pos));
 				  ajouterCarteManquanteRetournee();
+				  verifierNbCarteJokerRetournee();
 				  return;
 			  }
 		  }
 		  
 		  if(compteurCarteDeckPiocher < 2 && compteurCarteRetourneePiocher < 2){
-			  defausse.add(tmp);
+			  //defausse.add(tmp);
 			  tourDuJoueur.ajouterCarteWagon(carteRetournee.remove(pos));
 			  compteurCarteRetourneePiocher += 1;
 			  ajouterCarteManquanteRetournee();
+			  verifierNbCarteJokerRetournee();
 		  }
 	  }
+	  remettreDansDeckCarteDeLaDefausse();
   }
   
   /**
    * Ajoute les challenges au tourDuJoueur et remet au bas du deck les challenges non pris
-   * On sait qu'il y a forcement 1 challenge de pris obligatoirement (non tester ici)
-   * Position des cartes piochées (va de 0 à 2 inclus)
+   * On sait qu'il y a forcement 1 challenge de pris obligatoirement
+   * Position des cartes pioch√©es (va de 0 √† 2 inclus)
    * @param a position 0
    * @param b position 1
    * @param c position 2
@@ -203,6 +285,7 @@ public class Partie implements IUpdatable {
 		  //*/
 		  carteChallengesPiocher = true;
 	  }
+	  remettreDansDeckCarteDeLaDefausse();
   }
   
   /**
@@ -218,25 +301,91 @@ public class Partie implements IUpdatable {
   
   /**
    * 
+   * @param color La couleur du joueur (unique)
+   * @return a copy
+   */
+  synchronized public final Joueur getJoueurByColor(int color){
+	  for(int i=0;i<vectJoueurs.size();++i)
+		  if(vectJoueurs.get(i).getColor() == color)
+			  return new Joueur(vectJoueurs.get(i));
+	  return null;
+  }
+  
+  /**
+   * 
    * @param pos
    * @return a copy
    */
   synchronized public final CarteWagon getCarteRetourneeAt(int pos){
-	  if(pos > 0 && pos < carteRetournee.size()){
+	  if(pos >= 0 && pos < carteRetournee.size()){
+		  // Etrange d'etre oblige de faire ca...
+		  // En faite c'est logique car je fais un new et CarteWagonJoker herite de CarteWagon donc il peut
+		  // etre transformer en CarteWagon et perdre son etat de CarteWagonJoker
+		  // TODO voir avec prof pour eviter d'etre oblige de faire ca
+		  if(carteRetournee.get(pos) instanceof CarteWagonJoker)
+			  return new CarteWagonJoker((CarteWagonJoker) carteRetournee.get(pos));
 		  return new CarteWagon(carteRetournee.get(pos));
 	  }
+	  System.err.println("getCarteRetourneeAt: erreur avec pos="+pos
+			  +"\nEst nomrmalement declenche si le deck est vide => normal");
 	  return null;
   }
 
   synchronized private final void ajouterCarteManquanteRetournee() {
-	  if(carteRetournee.size() == Regles.NB_MAX_CARTE_RETOURNEE || deckDeCarte.size() == 0)
+	  remettreDansDeckCarteDeLaDefausse();
+	  
+	  if(carteRetournee.size() == Regles.NB_MAX_CARTE_RETOURNEE || deckDeCarte.size() == 0){
+		  System.out.println("ajouterCarteManquanteRetournee: return");
 		  return;
+	  }
 	  carteRetournee.add(deckDeCarte.remove(0));
 	  ajouterCarteManquanteRetournee();
+	  System.out.println("ajouterCarteManquanteRetournee: fin");
   }
   
   /**
-   * Remet les cartes et appelle une fonction recursif pour melanger les cartes
+   * Si, au cours du jeu, 3 cartes visibles sur 5 sont des locomotives, les 5 cartes
+   * sont alors immeediatement defausseÃÅes et remplaceÃÅes par 5 nouvelles cartes.
+   */
+  synchronized private final void verifierNbCarteJokerRetournee(){
+	  int somme = 0;
+	  if(carteRetournee.size() == 5)
+		  for(int i=0;i<5;++i)
+			  if(carteRetournee.get(i) instanceof CarteWagonJoker)
+				  somme+=1;
+	  if(somme >= 3){
+		  for(int i=0;i<5;++i)
+			  defausse.add(carteRetournee.remove(0));
+		  ajouterCarteManquanteRetournee();
+	  }
+  }
+  
+  /**
+   * Melange les cartes
+   */
+  synchronized private void melangerDeckDeCarte(){
+	  Vector<CarteWagon>  tmp = new Vector<CarteWagon>(deckDeCarte);
+	  System.out.println("melangerDeckDeCarte: "+deckDeCarte.size());
+	  deckDeCarte.removeAllElements();
+	  
+	  while(tmp.size()>0)
+		  deckDeCarte.add(tmp.remove((int) (Math.random()*tmp.size()) ));
+  }
+  
+  /**
+   * Melange les cartes
+   */
+  synchronized private void melangerChallenges(){
+	  Vector<Challenge>  tmp = new Vector<Challenge>(challenges);
+	  System.out.println("melangerChallenges: "+challenges.size());
+	  challenges.removeAllElements();
+	  
+	  while(tmp.size()>0)
+		  challenges.add(tmp.remove((int) (Math.random()*tmp.size()) ));
+  }
+  
+  /**
+   * Remet les cartes si le deck EST VIDE et appelle une fonction recursif pour melanger les cartes
    */
   synchronized private final void remettreDansDeckCarteDeLaDefausse(){
 	  if(deckDeCarte.size() == 0){
@@ -244,6 +393,9 @@ public class Partie implements IUpdatable {
 	  }
   }
   
+  /**
+   * Remet les cartes de facon recursif et melange
+   */
   synchronized private final void remettreDansDeckCarteDeLaDefausseRecursif(){
 	  if(defausse.size() >= 1){
 		  deckDeCarte.add(defausse.remove( (int)(Math.random()*defausse.size()) ));
@@ -251,5 +403,6 @@ public class Partie implements IUpdatable {
 		  return;
 	  remettreDansDeckCarteDeLaDefausseRecursif();
   }
+ 
 
 }
