@@ -1,6 +1,8 @@
 package lo43_TicketToRide.views;
 
 import lo43_TicketToRide.engine.Game;
+import lo43_TicketToRide.engine.Regles;
+import lo43_TicketToRide.engine.partie.Joueur;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -27,6 +29,13 @@ public class PartiePasseView extends PartieView {
 	public void render(GameContainer container, StateBasedGame sbgame, Graphics g) throws SlickException {
 		super.render(container, sbgame, g);
 		
+		if(!partie.getTourDuJoueur().isIA())
+			afficherInfoPersoJoueur(g,partie.getTourDuJoueur().getColor());
+		
+		if(afficherSelectionChallenge){
+			afficherChallengesPourLesPiocher(g);
+			butOkChallenges.render(container, g);
+		}
 		
 	}
 	
@@ -47,7 +56,37 @@ public class PartiePasseView extends PartieView {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		
+		if(butDeckChallenge.isMouseOver() ){
+			// TODO
+			if(!afficherSelectionChallenge){
+				Joueur tmp = partie.getTourDuJoueur();
+				if(!tmp.isIA() && partie.isPiocherChallengeOK()){
+					afficherSelectionChallenge = !afficherSelectionChallenge;
+					butOkChallenges.setAcceptingInput(true);
+				}
+			}
+		}else if(butDeckWagon.isMouseOver()){
+			Joueur tmp = partie.getTourDuJoueur();
+			if(!tmp.isIA())
+				partie.piocherCarteDeck();
+		}else if(butOkChallenges.isMouseOver() && butOkChallenges.isAcceptingInput()){
+			Joueur tmp = partie.getTourDuJoueur();
+			if(!tmp.isIA()){
+				partie.piocherChallengesSelectionne(isChallengeSelected[0], isChallengeSelected[1], isChallengeSelected[2]);
+				afficherSelectionChallenge = false;
+				butOkChallenges.setAcceptingInput(false);
+				System.out.println("okChallenge fin");
+			}
+		}
 		
+		for(int i=0;i<Regles.NB_MAX_CARTE_RETOURNEE;++i)
+			if(shapeCarteRetournee[i].contains(x, y)){
+				// Demander ˆ piocher
+				Joueur tmp = partie.getTourDuJoueur();
+				if(!tmp.isIA())
+					partie.piocherCarteRetournee(i);
+				break;
+			}
 		
 	}
 

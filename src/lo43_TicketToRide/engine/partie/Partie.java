@@ -21,7 +21,8 @@ import lo43_TicketToRide.utils.Timer;
  */
 public class Partie implements IUpdatable {
 
-  private static final int TEMPS_MAX_PAR_TOUR = 120000;
+	private static final int TEMPS_MAX_PAR_TOUR = 6000; // <= pour les tests
+  //private static final int TEMPS_MAX_PAR_TOUR = 100000;
   protected Timer tempsDeJeu, tempsMaxParTour;
 
    /**
@@ -67,21 +68,22 @@ public class Partie implements IUpdatable {
   protected boolean routePoser = false;
   
   public Partie(){
-	  tempsDeJeu = new Timer(0);
+	  tempsDeJeu = new Timer(999999999);
 	  tempsMaxParTour = new Timer(TEMPS_MAX_PAR_TOUR);
   }
   
   @Override
   synchronized public void update(int delta) {
-	  if(carte != null && tourDuJoueur != null){
+	  //if(carte != null && tourDuJoueur != null){
 		  tempsDeJeu.update(delta);
 		  tempsMaxParTour.update(delta);
-	  }
+	  //}
 	  
 	  if(tempsMaxParTour.isTimeComplete()){
 		  tempsMaxParTour.resetTime();
 		  finTourJoueur();
 	  }
+	  //System.out.println("Update partie");
 	  
 	  checkFinTourJoueur();
 		  
@@ -115,8 +117,7 @@ public class Partie implements IUpdatable {
 		  for(int i=0;i<tmp;++i)
 			  vectJoueurs.get(i).ajouterCarteWagon(deckDeCarte.remove(0));
 	  //*/
-	  System.out.println("vect "+vectJoueurs.get(0).pseudo+" "+vectJoueurs.get(0).getColor()+" taille "+
-			  vectJoueurs.get(0).getCartes().size());
+	  System.out.println("vect "+vectJoueurs.get(0).pseudo+" "+vectJoueurs.get(0).getColor()+" taille "+vectJoueurs.get(0).getCartes().size());
 	  tourDuJoueur = vectJoueurs.get(0);
   }
   
@@ -259,7 +260,7 @@ public class Partie implements IUpdatable {
   synchronized public Vector<Challenge> copierChallengePourSelectionnerCeuxAPiocher(){
 	  Vector<Challenge> cha = new Vector<Challenge>(3);
 	  for(int i=0;i<3 && i< challenges.size();++i)
-		  cha.add(new Challenge(challenges.get(0)));
+		  cha.add(new Challenge(challenges.get(i)));
 	return cha;
   }
   /**
@@ -271,8 +272,9 @@ public class Partie implements IUpdatable {
    * @param c position 2
    */
   synchronized public final void piocherChallengesSelectionne(boolean a, boolean b, boolean c){
-	  if(tourDuJoueur != null && compteurCarteDeckPiocher == 0 && compteurCarteRetourneePiocher == 0
-			  && !carteChallengesPiocher && !routePoser && challenges.size() >= 1){
+	  if(tourDuJoueur != null && compteurCarteDeckPiocher == 0 && compteurCarteRetourneePiocher <= 0
+			  && !carteChallengesPiocher && !routePoser && challenges.size() >= 1){ //le <= c juste pour les tests
+		  //System.out.println("PiocheChallenge inside");
 		  if(challenges.size() >= 3){
 			  if(c)
 				  tourDuJoueur.ajouterChallenge(challenges.remove(2));
@@ -298,6 +300,7 @@ public class Partie implements IUpdatable {
 		  carteChallengesPiocher = true;
 	  }
 	  remettreDansDeckCarteDeLaDefausse();
+	 // System.out.println("PiocheChallenge fin");
   }
   
   /**
@@ -344,16 +347,23 @@ public class Partie implements IUpdatable {
 	  return null;
   }
 
+  synchronized public final boolean isPiocherChallengeOK(){
+	  if(tourDuJoueur != null && compteurCarteDeckPiocher == 0 && compteurCarteRetourneePiocher <= 0
+			  && !carteChallengesPiocher && !routePoser && challenges.size() >= 1)
+		  return true;
+	  return false;
+  }
+  
   synchronized private final void ajouterCarteManquanteRetournee() {
 	  remettreDansDeckCarteDeLaDefausse();
 	  
 	  if(carteRetournee.size() == Regles.NB_MAX_CARTE_RETOURNEE || deckDeCarte.size() == 0){
-		  System.out.println("ajouterCarteManquanteRetournee: return");
+		  //System.out.println("ajouterCarteManquanteRetournee: return");
 		  return;
 	  }
 	  carteRetournee.add(deckDeCarte.remove(0));
 	  ajouterCarteManquanteRetournee();
-	  System.out.println("ajouterCarteManquanteRetournee: fin");
+	  //System.out.println("ajouterCarteManquanteRetournee: fin");
   }
   
   /**
@@ -416,6 +426,13 @@ public class Partie implements IUpdatable {
 		  return;
 	  remettreDansDeckCarteDeLaDefausseRecursif();
   }
- 
+  
+  synchronized public final Timer getTempsDeJeu(){
+	  return this.tempsDeJeu;
+  }
+  synchronized public final Timer getTempsMaxParTour(){
+	  return this.tempsMaxParTour;
+  }
+
 
 }

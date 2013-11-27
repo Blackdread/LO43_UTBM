@@ -188,10 +188,10 @@ public abstract class MainMenuView extends View {
 	}
 	
 	protected void afficherCouleur(Graphics g){
-		g.drawString("Couleur :", textFieldPseudo[0].getX() - 80, textFieldPseudo[0].getY()+40);
+		g.drawString("Couleur :", textFieldPseudo[0].getX() - 80, textFieldPseudo[0].getY()+50);
 		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
 			g.setColor(Colors.getColor(colors[i]));
-			g.fillOval(textFieldPseudo[i].getX()+40, textFieldPseudo[i].getY()+40, 20, 20); 
+			g.fillOval(textFieldPseudo[i].getX()+40, textFieldPseudo[i].getY()+50, 20, 20); 
 		}
 	}
 	
@@ -296,11 +296,12 @@ public abstract class MainMenuView extends View {
 			
 			partie.initialiserPartie();
 			
-			// Rejoindre la partie
+			// Init la partie
 			((PartieView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(partie);
+			((PartieView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(partie);
 			
-			container.setMouseGrabbed(false);
-			game.enterState(Game.PARTIE_SOLO_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+			// rejoindre
+			//Fait dans la classe fille
 		//}
 	}
 	

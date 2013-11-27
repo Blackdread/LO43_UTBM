@@ -51,6 +51,13 @@ public class Timer implements Serializable{
 		this.limit = limit;
 	}
 	
+	public Timer(Timer copy){
+		eventTime = copy.eventTime;
+		deltaStock = copy.deltaStock;
+		limit = copy.limit;
+		limitCounter = copy.limitCounter;
+	}
+	
 	/**
 	 * The classic update method.
 	 * 
@@ -169,5 +176,59 @@ public class Timer implements Serializable{
 	public float getEventTime() {
 		return eventTime;
 	}
-
+	
+	/**
+	 * Transforme le deltaStock sous la forme : 1000 = 00:00:01
+	 * 6000 = 00:00:06
+	 * @return
+	 */
+	public String getTimeFromDeltaStock(){
+		int tmp = (int) (deltaStock / 1000);
+		int sec = tmp % 60;
+		int minute = tmp / 60;
+		int hour = minute / 60;
+		String ret = "";
+		
+		if(hour<10)
+			ret = "0"+hour;
+		else
+			ret = ""+hour;
+		if(minute<10)
+			ret += ":0"+minute;
+		else
+			ret += ":"+minute;
+		if(sec<10)
+			ret += ":0"+sec;
+		else
+			ret += ":"+sec;
+		
+		return ret;
+	}
+	/**
+	 * deltaStock = 1000 eventTime = 10000 renvoi: 00:00:09
+	 * 
+	 * @return
+	 */
+	public String getTimeLeftToEventTime(){
+		int tmp = (int) ((eventTime - deltaStock) / 1000);
+		int sec = tmp % 60;
+		int minute = tmp / 60;
+		int hour = minute / 60;
+		String ret = "";
+		
+		if(hour<10)
+			ret = "0"+hour;
+		else
+			ret = ""+hour;
+		if(minute<10)
+			ret += ":0"+minute;
+		else
+			ret += ":"+minute;
+		if(sec<10)
+			ret += ":0"+sec;
+		else
+			ret += ":"+sec;
+		
+		return ret;
+	}
 }

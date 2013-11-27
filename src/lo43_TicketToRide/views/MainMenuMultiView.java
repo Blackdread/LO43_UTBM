@@ -82,7 +82,15 @@ public class MainMenuMultiView extends MainMenuView {
 		
 	}
 
-
+	@Override
+	protected int nbJoueur() {
+		int somme = 1;
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
+				if(isIA[i] || !(textFieldPseudo[i].getText().startsWith("IA")))
+					somme+=1;
+		return somme;
+	}
+	
 	@Override
 	public int getID() {
 		return Game.MAIN_MENU_MULTI_VIEW_ID;

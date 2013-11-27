@@ -31,8 +31,10 @@ public final class PartieSoloView extends PartieView {
 		
 		afficherInfoPersoJoueur(g,partie.getJoueurAt(0).getColor());
 		
-		if(afficherSelectionChallenge)
+		if(afficherSelectionChallenge){
 			afficherChallengesPourLesPiocher(g);
+			butOkChallenges.render(container, g);
+		}
 		
 	}
 	
@@ -53,13 +55,27 @@ public final class PartieSoloView extends PartieView {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		
-		if(butDeckChallenge.isMouseOver()){
+		if(butDeckChallenge.isMouseOver() ){
 			// TODO
-			afficherSelectionChallenge = !afficherSelectionChallenge;
+			if(!afficherSelectionChallenge){
+				Joueur tmp = partie.getTourDuJoueur();
+				if(!tmp.isIA() && partie.isPiocherChallengeOK()){
+					afficherSelectionChallenge = !afficherSelectionChallenge;
+					butOkChallenges.setAcceptingInput(true);
+				}
+			}
 		}else if(butDeckWagon.isMouseOver()){
 			Joueur tmp = partie.getTourDuJoueur();
 			if(!tmp.isIA())
 				partie.piocherCarteDeck();
+		}else if(butOkChallenges.isMouseOver() && butOkChallenges.isAcceptingInput()){
+			Joueur tmp = partie.getTourDuJoueur();
+			if(!tmp.isIA()){
+				partie.piocherChallengesSelectionne(isChallengeSelected[0], isChallengeSelected[1], isChallengeSelected[2]);
+				afficherSelectionChallenge = false;
+				butOkChallenges.setAcceptingInput(false);
+				System.out.println("okChallenge fin");
+			}
 		}
 		
 		for(int i=0;i<Regles.NB_MAX_CARTE_RETOURNEE;++i)

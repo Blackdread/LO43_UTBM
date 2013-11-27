@@ -4,6 +4,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lo43_TicketToRide.engine.Game;
 import lo43_TicketToRide.engine.Regles;
@@ -27,6 +29,21 @@ public class MainMenuSoloView extends MainMenuView {
 		
 		super.textFieldPseudo[0].setAcceptingInput(false);
 		butSolo.setNormalImage(ResourceManager.getImage("butSoloOver"));
+	}
+	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enter(container, game);
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;i++)
+			super.textFieldPseudo[i].setAcceptingInput(true);
+		//System.out.println("Enter solo");
+	}
+	
+	@Override
+	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+		super.leave(container, game);
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;i++)
+			super.textFieldPseudo[i].setAcceptingInput(false);
+		//System.out.println("Leave solo");
 	}
 	
 	@Override
@@ -76,25 +93,15 @@ public class MainMenuSoloView extends MainMenuView {
 		return somme;
 	}
 	
-	/* Remonter sur classe mere
+	//* Remonter sur classe mere
 	@Override
 	protected void gotoLancerPartie(){
+		super.gotoLancerPartie();
 		
-		Vector<Joueur> joueur = new Vector<Joueur>(nbJoueur());
+		container.setMouseGrabbed(false);
+		game.enterState(Game.PARTIE_SOLO_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 		
-		// Ajout des joueurs
-		joueur.add(new Joueur(textFieldPseudo[0].getText(), colors[0],false));
-		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
-			joueur.add(new Joueur(textFieldPseudo[i].getText(), colors[i],isIA[i]));
-		
-		// Creation de la partie
-		Partie partie = FactoryPartie.getInstance().creerPartie(joueur);
-		// Ajout de la carte de jeu
-		partie.setCarteJeu(FactoryCarteJeu.getInstance().creerCarteJeu());
-		
-		// Creation et Ajout des cartes wagons
-		
-	}*/
+	}//*/
 
 	@Override
 	public int getID() {

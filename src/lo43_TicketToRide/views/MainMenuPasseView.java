@@ -13,6 +13,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lo43_TicketToRide.engine.Game;
+import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.utils.ResourceManager;
 
 
@@ -37,6 +38,22 @@ public class MainMenuPasseView extends MainMenuView {
 	}
 	
 	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enter(container, game);
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;i++)
+			super.textFieldPseudo[i].setAcceptingInput(true);
+		//System.out.println("Enter passe");
+	}
+	
+	@Override
+	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+		super.leave(container, game);
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;i++)
+			super.textFieldPseudo[i].setAcceptingInput(false);
+		//System.out.println("Leave passe");
+	}
+	
+	@Override
 	public void update(GameContainer container, StateBasedGame sbGame, int delta) throws SlickException {
 		super.update(container, sbGame, delta);
 		
@@ -50,6 +67,9 @@ public class MainMenuPasseView extends MainMenuView {
 		super.afficherSwitchIA(g);
 		super.afficherPseudo(g);
 		super.afficherCouleur(g);
+		
+		g.setColor(Color.black);
+		g.drawString("Pseudo doit etre different de IA*** pour compter comme joueur (nb "+nbJoueur()+")", textFieldPseudo[0].getX(), textFieldPseudo[0].getY()+19);
 		
 		butLancerGame.render(container, g);
 	}
@@ -74,12 +94,29 @@ public class MainMenuPasseView extends MainMenuView {
 	
 	@Override
 	protected void gotoLancerPartie(){
+		isJoueur[0] = true;
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
+			if(!isIA[i] && !(textFieldPseudo[i].getText().startsWith("IA")))
+				isJoueur[i] = true;
 		
+		super.gotoLancerPartie();
+		
+		container.setMouseGrabbed(false);
+		game.enterState(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 	}
 
 	@Override
 	public int getID() {
 		return Game.MAIN_MENU_PASSE_ET_JOUE_VIEW_ID;
+	}
+
+	@Override
+	protected int nbJoueur() {
+		int somme = 1;
+		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
+				if(isIA[i] || !(textFieldPseudo[i].getText().startsWith("IA")))
+					somme+=1;
+		return somme;
 	}
 
 

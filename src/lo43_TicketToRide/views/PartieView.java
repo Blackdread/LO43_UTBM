@@ -9,6 +9,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
+import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -42,13 +43,18 @@ public abstract class PartieView extends View {
 	protected Rectangle[] shapeCarteRetournee = new Rectangle[Regles.NB_MAX_CARTE_RETOURNEE];
 	protected Rectangle[] shapeJoueur = new Rectangle[Regles.NB_MAX_JOUEUR];
 	
+	protected RoundedRectangle[] shapeSelectionChallenge = new RoundedRectangle[3];
+	protected boolean[] isChallengeSelected = new boolean[3];
+	protected int nbChallengeAfficher = 0;
+	protected MouseOverArea butOkChallenges;
+	
 	protected Rectangle shapeBas;
 	protected RoundedRectangle rectCarteJeu;
 	
 	/**
 	 * Juste pour laisser un delay
 	 */
-	protected boolean partieEnCours = false;
+	//protected boolean partieEnCours = false;
 	protected Partie partie;
 	protected boolean afficherSelectionChallenge = false;
 	
@@ -85,14 +91,26 @@ public abstract class PartieView extends View {
 		int height = (int)(shapeBas.getY()-y) - 10;
 		rectCarteJeu = new RoundedRectangle(10,y, width,height,10);
 		
+		int larg=150;
+		for(int i=0;i<3;++i){
+			shapeSelectionChallenge[i] = new RoundedRectangle(200+i*larg+i*10, rectCarteJeu.getY()+10, larg, 50, 8);
+		}
+		
+		Image tmp = ResourceManager.getImage("butOk");
+		butOkChallenges = new MouseOverArea(container, tmp, (int)shapeSelectionChallenge[2].getX()+(int)shapeSelectionChallenge[2].getWidth() + 20, (int)shapeSelectionChallenge[2].getY(), tmp.getWidth(), tmp.getHeight());
+		butOkChallenges.setMouseOverImage(ResourceManager.getImage("butOkOver"));
+		butOkChallenges.setMouseDownSound(ResourceManager.getSound("butClick"));
+		
 	}
 	
 	@Override
 	public void update(GameContainer container, StateBasedGame sbGame, int delta) throws SlickException {
 		super.update(container, sbGame, delta);
 		
-		if(partie != null && partieEnCours)
+		if(partie != null)// && partieEnCours)
 			partie.update(delta);
+		else
+			System.err.println("PartieView partie == null");
 		
 	}
 	
@@ -121,6 +139,11 @@ public abstract class PartieView extends View {
 		g.setColor(Color.black);
 		g.draw(shapeBas);
 		
+		g.drawString("Temps total partie", shapeBas.getX()+10, shapeBas.getY()+5);
+		g.drawString(""+partie.getTempsDeJeu().getTimeFromDeltaStock(), shapeBas.getX()+10, shapeBas.getY()+20);
+		g.drawString("Fin du tour dans", shapeBas.getX()+10, shapeBas.getY()+45);
+		g.drawString(""+partie.getTempsMaxParTour().getTimeLeftToEventTime(), shapeBas.getX()+10, shapeBas.getY()+60);
+		
 		super.render(container, sbgame, g);
 	}
 	
@@ -141,6 +164,17 @@ public abstract class PartieView extends View {
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
 		
+		if(butDeckChallenge.isMouseOver()){
+			isChallengeSelected[0] = false;
+			isChallengeSelected[1] = false;
+			isChallengeSelected[2] = false;
+		}
+		
+		if(afficherSelectionChallenge){
+			for(int i=0;i<nbChallengeAfficher;++i)
+				if(shapeSelectionChallenge[i].contains(x, y))
+					isChallengeSelected[i] = !isChallengeSelected[i];
+		}
 		
 	}
 	
@@ -153,9 +187,14 @@ public abstract class PartieView extends View {
 			g.setColor(Colors.getColor(tmp.getColor()));
 			g.fill(shapeJoueur[i]);
 			
-			g.setColor(Color.black);
+			if(tmp.equals(partie.getTourDuJoueur())){
+				g.setColor(Color.green);
+				g.fillRect(shapeJoueur[i].getX()+shapeJoueur[i].getWidth()/2-50,shapeJoueur[i].getY()-10,100,10);
+			}else
+				g.setColor(Color.black);
 			g.draw(shapeJoueur[i]);
 			
+			g.setColor(Color.black);
 			g.drawString("Pseudo:   "+tmp.getPseudo(), shapeJoueur[i].getX() + 2, shapeJoueur[i].getY()+3);
 			g.drawString("Nb wagon: "+tmp.getNbWagon(), shapeJoueur[i].getX() + 2, shapeJoueur[i].getY()+23);
 			g.drawString("Score:    "+tmp.getScore(), shapeJoueur[i].getX() + 2, shapeJoueur[i].getY()+43);
@@ -168,18 +207,21 @@ public abstract class PartieView extends View {
 	protected void afficherChallengesPourLesPiocher(Graphics g){
 		Vector<Challenge> challenge = partie.copierChallengePourSelectionnerCeuxAPiocher();
 		int i=0, larg=150;
+		nbChallengeAfficher = challenge.size();
 		for(Challenge v : challenge){
 			if(v!=null){
-				// TODO remplacer par des shape
 				g.setColor(Color.magenta);
-				g.fillRoundRect(200+i*larg+i*10, rectCarteJeu.getY()+10, larg, 50, 8);
+				g.fill(shapeSelectionChallenge[i]);
 				
 				g.setColor(Color.black);
 				g.drawString("Points "+v.getPoints(), 200+i*larg+i*10 + 40, rectCarteJeu.getY()+12);
 				g.drawString(""+v.getDepart().getNomUV(), 200+i*larg+i*10 + 40, rectCarteJeu.getY()+27);
 				g.drawString(""+v.getArrivee().getNomUV(), 200+i*larg+i*10 + 40, rectCarteJeu.getY()+42);
 				
-				g.drawRoundRect(200+i*larg+i*10, rectCarteJeu.getY()+10, larg, 50, 8);
+				if(isChallengeSelected[i]){
+					g.setColor(Color.green);
+				}
+				g.draw(shapeSelectionChallenge[i]);
 				i+=1;
 			}
 		}
@@ -302,7 +344,8 @@ public abstract class PartieView extends View {
 	public void setPartie(Partie partie) {
 		this.partie = partie;
 	}
-
+	 
+	
 	@Override
 	public int getID() {
 		return Game.PARTIE_VIEW_ID;
