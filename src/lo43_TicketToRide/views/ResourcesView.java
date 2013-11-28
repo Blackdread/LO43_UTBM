@@ -4,7 +4,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -38,6 +40,8 @@ public class ResourcesView extends View {
 	private Timer timer;
 
 	private MouseOverArea butJouer, butRegle;
+	
+	private Rectangle rectFun;
 	
 	public ResourcesView(GameContainer container) {
 		timer = new Timer(WAIT_TIME_BEFORE_NEXTR);
@@ -87,6 +91,8 @@ public class ResourcesView extends View {
 		bar.setLocation(container.getWidth() / 2 - 100, 3*container.getHeight() / 4);
 		bar.setValue(40);
 		
+		
+		rectFun = new Rectangle(10,100,50,20);
 	}
 
 	@Override
@@ -100,6 +106,9 @@ public class ResourcesView extends View {
 		}
 		
 		if (ready) {
+			g.draw(rectFun);
+			g.drawString("Ici", rectFun.getX()+5, rectFun.getY()+2);
+			
 			//g.drawString("Press a key or click", container.getWidth() / 2 - 90, container.getHeight() / 2 + 10);
 			butJouer.render(container, g);
 			butRegle.render(container, g);
@@ -132,7 +141,8 @@ public class ResourcesView extends View {
 	@Override
 	public void keyPressed(int key, char c) {
 		super.keyPressed(key, c);
-		//goToMenu();
+		if(key == Input.KEY_ESCAPE)
+			goToFun();
 	}
 
 	@Override
@@ -142,9 +152,17 @@ public class ResourcesView extends View {
 			goToMenuSolo();
 		if(butRegle.isMouseOver())
 			goToRegle();
-		
+		if(rectFun.contains(x, y))
+			goToFun();
 	}
 
+	private void goToFun(){
+		if (ready) {
+		container.setMouseGrabbed(false);
+		game.enterState(Game.FUN_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+		}
+	}
+	
 	private void goToRegle() {
 		if (ready) {
 			doneOnce = true;

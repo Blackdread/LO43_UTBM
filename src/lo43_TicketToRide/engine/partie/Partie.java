@@ -63,7 +63,7 @@ public class Partie implements IUpdatable {
   /**
    * Max 2
    */
-  protected int compteurCarteRetourneePiocher = -11110;
+  protected int compteurCarteRetourneePiocher = 0;
   protected boolean carteChallengesPiocher = false;
   protected boolean routePoser = false;
   

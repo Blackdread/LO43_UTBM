@@ -21,6 +21,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @since 17 11 2013
  */
 public class Game extends StateBasedGame {
+	
 	private static AppGameContainer container;
 
 	/**
@@ -53,7 +54,7 @@ public class Game extends StateBasedGame {
 	public static final int PARTIE_MULTI_VIEW_ID = 66;
 	public static final int PARTIE_PASSE_ET_JOUE_VIEW_ID = 67;
 	
-	public static final int END_GAME_VIEW_ID = 512;
+	public static final int FUN_VIEW_ID = 512;
 	
 	public static final int TRANSITION_VIEW_ID = 1024;
 	public static final int LAST_VIEW_ID = 2048;
@@ -91,6 +92,7 @@ public class Game extends StateBasedGame {
 		addState(new TransitionView());//*/
 		addState(new LastView());
 		
+		addState(new FunView());
 		//addState(new InGameMultiView());
 		//*/
 		

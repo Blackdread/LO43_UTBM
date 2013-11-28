@@ -6,6 +6,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
@@ -48,7 +49,7 @@ public abstract class PartieView extends View {
 	protected int nbChallengeAfficher = 0;
 	protected MouseOverArea butOkChallenges;
 	
-	protected Rectangle shapeBas;
+	protected Rectangle shapeBas, shapeVoirSesChal;
 	protected RoundedRectangle rectCarteJeu;
 	
 	/**
@@ -57,6 +58,7 @@ public abstract class PartieView extends View {
 	//protected boolean partieEnCours = false;
 	protected Partie partie;
 	protected boolean afficherSelectionChallenge = false;
+	protected boolean afficherSesChallenge = false;
 	
 	@Override
 	public void initResources() {
@@ -90,6 +92,8 @@ public abstract class PartieView extends View {
 		int width = (int) (shapeCarteRetournee[0].getX() - 30);
 		int height = (int)(shapeBas.getY()-y) - 10;
 		rectCarteJeu = new RoundedRectangle(10,y, width,height,10);
+		
+		shapeVoirSesChal = new Rectangle(shapeBas.getX()+shapeBas.getWidth()-105,shapeBas.getY()+40,95,40);
 		
 		int larg=150;
 		for(int i=0;i<3;++i){
@@ -131,6 +135,11 @@ public abstract class PartieView extends View {
 		g.setColor(Color.black);
 		g.draw(rectCarteJeu);
 		
+		partie.getCarteJeu().render(g, (int)rectCarteJeu.getX(), (int)rectCarteJeu.getY()+10);
+		
+		if(afficherSesChallenge)
+			afficherChallengesPosseder(g);
+		
 		g.setDrawMode(Graphics.MODE_COLOR_MULTIPLY);
 		g.setColor(Color.magenta);
 		g.fill(shapeBas);
@@ -138,6 +147,10 @@ public abstract class PartieView extends View {
 		
 		g.setColor(Color.black);
 		g.draw(shapeBas);
+		
+		g.draw(shapeVoirSesChal);
+		g.drawString(" Voir ses", shapeVoirSesChal.getX()+2, shapeVoirSesChal.getY()+4);
+		g.drawString("challenges", shapeVoirSesChal.getX()+2, shapeVoirSesChal.getY()+19);
 		
 		g.drawString("Temps total partie", shapeBas.getX()+10, shapeBas.getY()+5);
 		g.drawString(""+partie.getTempsDeJeu().getTimeFromDeltaStock(), shapeBas.getX()+10, shapeBas.getY()+20);
@@ -163,6 +176,12 @@ public abstract class PartieView extends View {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
+		afficherSesChallenge = false;
+		
+		if(shapeVoirSesChal.contains(x, y)){
+			// TODO Ajouter verification par rapport au multi
+			afficherSesChallenge = true;
+		}
 		
 		if(butDeckChallenge.isMouseOver()){
 			isChallengeSelected[0] = false;
@@ -222,6 +241,32 @@ public abstract class PartieView extends View {
 					g.setColor(Color.green);
 				}
 				g.draw(shapeSelectionChallenge[i]);
+				i+=1;
+			}
+		}
+	}
+	
+	protected void afficherChallengesPosseder(Graphics g){
+		Vector<Challenge> challenge = partie.getTourDuJoueur().getChallenges();
+		int i=0, larg=150, k=0;
+		RoundedRectangle shape = new RoundedRectangle(200+i*larg+i*10, rectCarteJeu.getY()+180, larg, 50, 8);
+		nbChallengeAfficher = challenge.size();
+		for(Challenge v : challenge){
+			if(v!=null){
+				if(i > 4){
+					k++;
+					i=0;
+				}
+				shape.setLocation(200+i*larg+i*10, rectCarteJeu.getY()+180+k*55);
+				g.setColor(Color.magenta);
+				g.fill(shape);
+				
+				g.setColor(Color.black);
+				g.draw(shape);
+				g.drawString("Points "+v.getPoints(), shape.getX()+25, shape.getY()+2);
+				g.drawString(""+v.getDepart().getNomUV(), shape.getX()+25, shape.getY()+17);
+				g.drawString(""+v.getArrivee().getNomUV(), shape.getX()+25, shape.getY()+33);
+
 				i+=1;
 			}
 		}

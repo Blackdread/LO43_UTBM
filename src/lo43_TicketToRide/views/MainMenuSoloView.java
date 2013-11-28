@@ -22,7 +22,7 @@ import lo43_TicketToRide.utils.ResourceManager;
  * 
  */
 public class MainMenuSoloView extends MainMenuView {
-
+	
 	@Override
 	public void initResources() {
 		super.initResources();
