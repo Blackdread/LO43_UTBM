@@ -207,6 +207,22 @@ public class Partie implements IUpdatable {
   }
   
   /**
+   * Cherche la route tel que : carte.getRouteAt(i).equals(routeAPrendre) si true il ajoute
+   * carte.getRouteAt(i) le possesseur et met routePoser a true s'il a pu ajouter le possesseur
+   * @param routeAPrendre
+   */
+  synchronized public void prenderPossessionRoute(final Route routeAPrendre){
+	  int o = carte.getRouteSize();
+	  for(int i=0;i<o;++i)
+		  if(carte.getRouteAt(i).equals(routeAPrendre)){
+			  if(carte.getRouteAt(i).ajouterPossesseur(tourDuJoueur)){
+				  routePoser = true;
+			  }
+			  break;
+		  }
+  }
+  
+  /**
    * Pioche une carte et l'ajoute au tourDujoueur actuel
    * @Annotation Verification par rapport aux regles fais
    */
@@ -336,7 +352,7 @@ public class Partie implements IUpdatable {
 		  // Etrange d'etre oblige de faire ca...
 		  // En faite c'est logique car je fais un new et CarteWagonJoker herite de CarteWagon donc il peut
 		  // etre transformer en CarteWagon et perdre son "instance" de CarteWagonJoker
-		  // TODO voir avec prof pour eviter d'etre oblige de faire ca
+		  // // TODO
 		  // carteRetournee.get(pos).getClass().newInstance() => c'est peut etre ca
 		  if(carteRetournee.get(pos) instanceof CarteWagonJoker)
 			  return new CarteWagonJoker((CarteWagonJoker) carteRetournee.get(pos));

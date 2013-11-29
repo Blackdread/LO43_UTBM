@@ -36,7 +36,7 @@ public class CarteJeu implements IRenderable{
 		for(Ville v : villes)
 			if(v != null)
 				v.render(g, deltaX, deltaY);
-		System.out.println("Fin render CarteJeu\n\n");
+		//System.out.println("Fin render CarteJeu\n\n");
 	}
 	
 	synchronized public void ajouterVille(Ville ville){
@@ -45,6 +45,10 @@ public class CarteJeu implements IRenderable{
 	
 	synchronized public void ajouterRoute(Route route){
 		routes.add(route);
+	}
+	
+	synchronized public int getRouteSize(){
+		return routes.size();
 	}
 	
 	/**

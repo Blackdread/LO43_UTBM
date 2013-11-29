@@ -134,6 +134,19 @@ public class Route implements IRenderable{
 			return false;
 		return true;
 	}
+	
+	@Override
+	public boolean equals(Object route){
+		if(route instanceof Route){
+			if(nbWagonNecessaire== ((Route)route).nbWagonNecessaire &&
+			couleurNecessaireRoute == ((Route)route).couleurNecessaireRoute &&
+			ville1 == ((Route)route).ville1 &&
+			ville2 == ((Route)route).ville2)
+				return true;
+		}
+		return false;
+		
+	}
 
 
 }

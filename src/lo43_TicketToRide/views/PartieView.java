@@ -137,7 +137,7 @@ public abstract class PartieView extends View {
 		
 		partie.getCarteJeu().render(g, (int)rectCarteJeu.getX(), (int)rectCarteJeu.getY()+10);
 		
-		if(afficherSesChallenge)
+		if(afficherSesChallenge && !partie.getTourDuJoueur().isIA())
 			afficherChallengesPosseder(g);
 		
 		g.setDrawMode(Graphics.MODE_COLOR_MULTIPLY);

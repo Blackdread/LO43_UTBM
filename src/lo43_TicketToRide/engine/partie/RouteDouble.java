@@ -106,5 +106,15 @@ public class RouteDouble extends Route {
 			return false;
 		return true;
 	}
+  
+  @Override
+	public boolean equals(Object route){
+		if(route instanceof RouteDouble){
+			if(super.equals(route) && couleurNecessaireRoute2 == ((RouteDouble)route).couleurNecessaireRoute2)
+				return true;
+		}
+		return false;
+		
+	}
 
 }
