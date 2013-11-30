@@ -28,8 +28,8 @@ import lo43_TicketToRide.utils.Timer;
 public class Partie implements IUpdatable {
 
 	private static final int TEMPS_MAX_PAR_TOUR = 6000; // <= pour les tests
-  //private static final int TEMPS_MAX_PAR_TOUR = 100000;
-  protected Timer tempsDeJeu, tempsMaxParTour;
+	//private static final int TEMPS_MAX_PAR_TOUR = 100000;
+	protected Timer tempsDeJeu, tempsMaxParTour;
 
    /**
    * 
@@ -59,6 +59,12 @@ public class Partie implements IUpdatable {
   protected Vector<CarteWagon> carteRetournee = new Vector<CarteWagon>(Regles.NB_MAX_CARTE_RETOURNEE);
   protected Joueur tourDuJoueur;
 
+  /**
+   * True si c'est le dernier tour
+   */
+  protected boolean lastTurn;
+  protected boolean gameIsOver;
+  
   /*
    * Possibilités lors d'un tour
    */
@@ -69,7 +75,7 @@ public class Partie implements IUpdatable {
   /**
    * Max 2
    */
-  protected int compteurCarteRetourneePiocher = -1010100;
+  protected int compteurCarteRetourneePiocher = 0;
   protected boolean carteChallengesPiocher = false;
   protected boolean routePoser = false;
   
@@ -90,7 +96,7 @@ public class Partie implements IUpdatable {
 		  finTourJoueur();
 	  }
 	  //System.out.println("Update partie");
-	  
+	  checkIsLastTurnToFire();
 	  checkFinTourJoueur();
 		  
   }
@@ -127,12 +133,27 @@ public class Partie implements IUpdatable {
 	  tourDuJoueur = vectJoueurs.get(0);
   }
   
-  public boolean isGameOver() {
-	  return false;// TODO
+  
+  synchronized public final boolean isGameIsOver() {
+	  return gameIsOver;
   }
 
-  public void checkGameOver() {
-	  // TODO
+  /**
+   * true si joueur.nbWagon <= 3
+   */
+  synchronized public final void checkIsLastTurnToFire() {
+	  for(Joueur v : vectJoueurs)
+		  if(v.nbWagon <= 3)
+			  lastTurn = true;
+  }
+  
+  synchronized protected void calculerLesPointsAtEndOfGame(){
+	  //TODO pas fait
+	  for(Joueur v : vectJoueurs){
+		  for(Challenge o : v.getChallenges()){
+			  
+		  }
+	  }
   }
   
   synchronized public final void setCarteJeu(CarteJeu carte){
@@ -156,7 +177,7 @@ public class Partie implements IUpdatable {
   synchronized public CarteJeu getCarteJeu() {
 	 /* if(carte == null)
 		  return null;
-	  return new Joueur(carte);
+	  return new sdsdsdsds(carte);
 	  */
 	  return carte;
   }
@@ -191,17 +212,22 @@ public class Partie implements IUpdatable {
    * Verifie si le tour du joueur est fini si oui alors on passe au joueur suivant
    */
   synchronized private void checkFinTourJoueur(){
-	  
+	  if(routePoser || carteChallengesPiocher || compteurCarteDeckPiocher >= 2 || compteurCarteRetourneePiocher >= 2){
+		  finTourJoueur();
+	  }
   }
   
   /**
    * Passe au joueur suivant et initialise les actions possibles d'un tour
+   * Si c'est le last turn => si on passe a nouveau au joueur 0 alors c'est fini
    */
   synchronized private void finTourJoueur() {
 	  int index = vectJoueurs.indexOf(tourDuJoueur, 0);
-	  if(index >= vectJoueurs.size()-1)
+	  if(index >= vectJoueurs.size()-1){
 		  tourDuJoueur = vectJoueurs.get(0);
-	  else
+		  gameIsOver = true;
+		  calculerLesPointsAtEndOfGame();
+	  }else
 		  tourDuJoueur = vectJoueurs.get(index+1);
 	  
 	  compteurCarteDeckPiocher = 0;
@@ -335,7 +361,7 @@ public class Partie implements IUpdatable {
 			  
 			  //defausse.add(deckDeCarte.get(0));
 			  tourDuJoueur.ajouterCarteWagon(deckDeCarte.remove(0));
-			 // compteurCarteDeckPiocher +=1;
+			  compteurCarteDeckPiocher +=1;
 		  }
 	  }
 	  remettreDansDeckCarteDeLaDefausse();
@@ -565,5 +591,16 @@ public class Partie implements IUpdatable {
 	  return this.tempsMaxParTour;
   }
 
-
+  synchronized public void forcerFinGame() {
+		lastTurn = true;
+		gameIsOver = true;
+		calculerLesPointsAtEndOfGame();
+  }
+  /**
+   * 
+   * @return a copy
+   */
+  synchronized public Vector<Joueur> getJoueurs(){
+	  return new Vector<Joueur>(vectJoueurs);
+  }
 }

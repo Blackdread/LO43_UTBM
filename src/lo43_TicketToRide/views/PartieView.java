@@ -12,6 +12,8 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import lo43_TicketToRide.engine.Game;
 import lo43_TicketToRide.engine.Regles;
@@ -49,7 +51,7 @@ public abstract class PartieView extends View {
 	protected int nbChallengeAfficher = 0;
 	protected MouseOverArea butOkChallenges;
 	
-	protected Rectangle shapeBas, shapeVoirSesChal;
+	protected Rectangle shapeBas, shapeVoirSesChal, shapeArreterGame;
 	protected RoundedRectangle rectCarteJeu;
 	
 	/**
@@ -79,6 +81,9 @@ public abstract class PartieView extends View {
 		for(int i=0;i<Regles.NB_MAX_CARTE_RETOURNEE;++i){
 			shapeCarteRetournee[i] = new Rectangle(container.getWidth() - largCarte - margin, hautCarte+margin+5*(i+1) + hautCarte*(i+1),largCarte,hautCarte);
 		}
+		
+		shapeArreterGame = new Rectangle(10, 60,85,40);
+		
 		largCarte = 170;
 		hautCarte = 100;
 		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
@@ -129,6 +134,10 @@ public abstract class PartieView extends View {
 		butDeckWagon.render(container, g);
 		g.setColor(Color.black);
 		g.drawString(""+partie.getDeckSize(), butDeckWagon.getX()+5, butDeckWagon.getY()+5);
+		
+		g.draw(shapeArreterGame);
+		g.drawString(" Arreter", shapeArreterGame.getX()+2, shapeArreterGame.getY()+3);
+		g.drawString("la partie", shapeArreterGame.getX()+2, shapeArreterGame.getY()+17);
 		
 		afficherJoueurs(g);
 		
@@ -201,11 +210,19 @@ public abstract class PartieView extends View {
 			if(tmp != null)
 				if(partie.isPossibleToTakeRoad(tmp)){
 					partie.prendrePossessionRoute(tmp);
-					System.out.println("Routes prise: "+tmp.getNomVille1()+" "+tmp.getNomVille2());
+					//System.out.println("Routes prise: "+tmp.getNomVille1()+" "+tmp.getNomVille2());
+					//System.out.println("Routes cliquer: "+tmp.getNomVille1()+" "+tmp.getNomVille2()+"("+x+","+y+")");
 				}
-			if(tmp != null)
-				System.out.println("Routes cliquer: "+tmp.getNomVille1()+" "+tmp.getNomVille2()+"("+x+","+y+")");
+			
+			if(shapeArreterGame.contains(x, y)){
+				// TODO differents un peu pour le multi
+				// TODO 
+				partie.forcerFinGame();
+				gotoEndPartieView();
+			}
 		}
+		
+		
 	}
 	
 	protected void afficherJoueurs(Graphics g){
@@ -354,7 +371,6 @@ public abstract class PartieView extends View {
 			dessinerCarteDuJoueur(g,i,Colors.getColor(a), nb);
 			i+=1;
 		}
-		
 	}
 	
 	private void dessinerCarteDuJoueur(Graphics g,final int i,final Color color, final int nbCarte){
@@ -392,9 +408,10 @@ public abstract class PartieView extends View {
 	}
 	
 	
-	protected void goto22() {
+	protected void gotoEndPartieView() {
 		container.setMouseGrabbed(false);
-		//game.enterState(Game., new FadeOutTransition(), new FadeInTransition());
+		((EndPartieView)Game.getStateByID(Game.END_PARTIE_VIEW_ID)).setPartie(partie);
+		game.enterState(Game.END_PARTIE_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 	}
 
 	public void setPartie(Partie partie) {
