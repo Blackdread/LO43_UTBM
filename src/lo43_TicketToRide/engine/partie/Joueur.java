@@ -78,6 +78,25 @@ public class Joueur {
 		return isIA;
 	}
 	
+	synchronized public int getNbCarte(){
+		return cartes.size();
+	}
+	
+	synchronized public void retirerCarteAt(int i){
+		if(i>=0 && i < cartes.size())
+			cartes.remove(i);
+	}
+	/**
+	 * 
+	 * @param i
+	 * @return pas une copy
+	 */
+	synchronized public CarteWagon getCarteAt(int i){
+		if(i>=0 && i < cartes.size())
+			return cartes.get(i);
+		return null;
+	}
+	
 	synchronized public int compterNbCarteDeTelleCouleur(int color){
 		int somme=0;
 		for(int i=0;i<cartes.size();++i)

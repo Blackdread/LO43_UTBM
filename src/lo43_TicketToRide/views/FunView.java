@@ -6,6 +6,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Line;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -26,6 +28,8 @@ public class FunView extends View {
 	
 	private boolean isRot = false;
 	private float rot = 0.0f;
+	int aa=10;
+	Line a = new Line(20*aa,50*aa,50*aa,50*aa);
 	
 	@Override
 	public void initResources() {
@@ -94,7 +98,8 @@ public class FunView extends View {
 	            g.scale(scale, scale);
 	         }
 	      }
-	      
+	      g.resetTransform();
+	      g.draw(a);
 	      
 		/*
 		g.setColor(new Color(1,1,1,0.5f));
@@ -114,6 +119,12 @@ public class FunView extends View {
 		if(isRot){
 			rot+=1;
 		}
+	}
+	
+	public void mousePressed(int button,int x, int y){
+		// Test
+		System.out.println("Distance de la ligne = "+a.distance(new Vector2f(x,y)));
+		
 	}
 
 	public void keyPressed(int key, char c) {

@@ -10,7 +10,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
-import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -22,6 +21,7 @@ import lo43_TicketToRide.engine.partie.CarteWagonJoker;
 import lo43_TicketToRide.engine.partie.Challenge;
 import lo43_TicketToRide.engine.partie.Joueur;
 import lo43_TicketToRide.engine.partie.Partie;
+import lo43_TicketToRide.engine.partie.Route;
 import lo43_TicketToRide.utils.Colors;
 import lo43_TicketToRide.utils.ResourceManager;
 
@@ -195,6 +195,17 @@ public abstract class PartieView extends View {
 					isChallengeSelected[i] = !isChallengeSelected[i];
 		}
 		
+		if(Input.MOUSE_LEFT_BUTTON == button){
+			Route tmp = partie.getCarteJeu().getRouteLaPlusProcheDuPoint(x-(int)rectCarteJeu.getX(), y-(int)rectCarteJeu.getY()-10);
+			//Route tmp = partie.getCarteJeu().getRouteLaPlusProcheDuPoint(x, y);
+			if(tmp != null)
+				if(partie.isPossibleToTakeRoad(tmp)){
+					partie.prendrePossessionRoute(tmp);
+					System.out.println("Routes prise: "+tmp.getNomVille1()+" "+tmp.getNomVille2());
+				}
+			if(tmp != null)
+				System.out.println("Routes cliquer: "+tmp.getNomVille1()+" "+tmp.getNomVille2()+"("+x+","+y+")");
+		}
 	}
 	
 	protected void afficherJoueurs(Graphics g){

@@ -1,7 +1,10 @@
 package lo43_TicketToRide.engine.partie;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import lo43_TicketToRide.engine.IRenderable;
 import lo43_TicketToRide.utils.Colors;
@@ -33,18 +36,23 @@ public class Route implements IRenderable{
 		ville2 = v2;
 	}
 	
+	public int getCouleurNecessaireRoute() {
+		return couleurNecessaireRoute;
+	}
+
 	public Route(Route copy) {
 		this.nbWagonNecessaire = copy.nbWagonNecessaire;
 		this.couleurNecessaireRoute = copy.couleurNecessaireRoute;
-		this.possederPar = copy.possederPar;
+		if(copy.possederPar != null)
+			this.possederPar = new Joueur(copy.possederPar);
 		this.ville1 = new Ville(copy.ville1);
 		this.ville2 = new Ville(copy.ville2);
 	}
 	
 	@Override
 	public void render(Graphics g,final int deltaX,final int deltaY) {
-		g.setColor(Colors.getColor(couleurNecessaireRoute));
 		Rectangle tmp = new Rectangle(0,0,calculerLonguerDesRectangles(),20);
+		Rectangle tmpJoueur = new Rectangle(0,0,calculerLonguerDesRectangles(),20);
 		// tmp.transform(Transform.createRotateTransform(calculerAngleEntreDeuxVilles()));
 		//g.rotate(ville1.x+deltaX, ville1.y+deltaY, Game.rot);
 		g.rotate(ville1.x+deltaX, ville1.y+deltaY, 360-calculerAngleEntreDeuxVilles());
@@ -54,11 +62,13 @@ public class Route implements IRenderable{
 			
 			if(ville1.x <= ville2.x){
 				tmp.setLocation(ville1.x+deltaX+tmp.getWidth()*i+2*i, ville1.y+deltaY);
+				tmpJoueur.setLocation(ville1.x+deltaX+tmp.getWidth()*i+2*i, ville1.y+deltaY);
 				//if(0 == i)
 				//	System.out.println("1<r:"+nbWagonNecessaire+" "+ville1.nomUV+" "+ville2.nomUV);
 			}else{
 				// TODO ATTENTION
 				tmp.setLocation(ville2.x+deltaX+tmp.getWidth()*i+2*i, ville2.y+deltaY);
+				tmpJoueur.setLocation(ville2.x+deltaX+tmp.getWidth()*i+2*i, ville2.y+deltaY);
 				//if(0 == i)
 				//	System.out.println("2>r:"+nbWagonNecessaire+" "+ville1.nomUV+" "+ville2.nomUV);
 			}
@@ -70,7 +80,14 @@ public class Route implements IRenderable{
 			
 			//g.fill(tmp.transform(Transform.createRotateTransform(calculerAngleEntreDeuxVilles()*180.0f)));
 			//g.fill(tmp.transform(Transform.createRotateTransform((float) Math.toRadians(calculerAngleEntreDeuxVilles()))));
+			g.setColor(Colors.getColor(couleurNecessaireRoute));
 			g.fill(tmp);
+			if(possederPar != null){
+				g.setColor(Colors.getColor(possederPar.color));
+				g.fill(tmpJoueur);
+				g.setColor(Color.black);
+				g.draw(tmpJoueur);
+			}
 			//if(0 == i)
 			//	g.drawString("r:"+nbWagonNecessaire+" "+ville1.nomUV+" "+(360-calculerAngleEntreDeuxVilles()), tmp.getX()-30, tmp.getY()-22);
 			
@@ -85,6 +102,13 @@ public class Route implements IRenderable{
 		
 		int hypo = (int) Math.hypot(ville1.getX() - ville2.getX(),ville1.getY() - ville2.getY());
 		return hypo / nbWagonNecessaire;
+	}
+	
+	public String getNomVille1(){
+		return ville1.nomUV;
+	}
+	public String getNomVille2(){
+		return ville2.nomUV;
 	}
 	
 	/**
@@ -127,7 +151,7 @@ public class Route implements IRenderable{
 	
 	/**
 	 * 
-	 * @return true si un joueur a possede la route
+	 * @return true si un joueur possede la route
 	 */
 	public boolean isRoutePosseder(){
 		if(possederPar == null)
@@ -135,6 +159,24 @@ public class Route implements IRenderable{
 		return true;
 	}
 	
+	/**
+	 * Retourne la distance du point (x,y) par rapport a la Line de cette route
+	 * Get the shortest distance from a point to this line
+	 * @param x
+	 * @param y
+	 * @return The distance from the line to the point
+	 */
+	public float distance(final int x,final int y){
+		return (new Line(ville1.x,ville1.y,ville2.x,ville2.y)).distance(new Vector2f(x,y));
+	}
+	
+	public int getNbWagonNecessaire() {
+		return nbWagonNecessaire;
+	}
+
+	/**
+	 * On ne verifie pas la personne qui possede la route
+	 */
 	@Override
 	public boolean equals(Object route){
 		if(route instanceof Route){

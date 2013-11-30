@@ -39,8 +39,22 @@ public class FactoryCarteJeu {
   	  
 	 
 	  //default:
-	  for(int i=0;i<13;++i)
-		  ret.ajouterVille(new Ville("ville"+i));
+	  ret.ajouterVille(new Ville("LO41"));
+	  ret.ajouterVille(new Ville("LO43"));
+	  ret.ajouterVille(new Ville("LO44"));
+	  ret.ajouterVille(new Ville("RE43"));
+	  ret.ajouterVille(new Ville("RE42"));
+	  
+	  ret.ajouterVille(new Ville("LO41"));
+	  ret.ajouterVille(new Ville("LO41"));
+	  ret.ajouterVille(new Ville("LO41"));
+	  ret.ajouterVille(new Ville("LO41"));
+	  ret.ajouterVille(new Ville("LO41"));
+	  
+	  ret.ajouterVille(new Ville("XE03"));
+	  ret.ajouterVille(new Ville("XC00"));
+	  ret.ajouterVille(new Ville("X00"));
+	  
 	  int xx = 4;
 	  ret.setVillePos(0, 10*xx, 50);
 	  ret.setVillePos(1, 40*xx, 20);
@@ -60,14 +74,17 @@ public class FactoryCarteJeu {
 	  
 	  ret.ajouterRoute(new Route(ret.getVilleAt(0), ret.getVilleAt(1), Colors.getColorId(CarteType.Blue), 4));
 	  ret.ajouterRoute(new RouteDouble(ret.getVilleAt(1), ret.getVilleAt(2), Colors.getColorId(CarteType.Red), 3,0));
-	  ret.ajouterRoute(new Route(ret.getVilleAt(2), ret.getVilleAt(3), Colors.getColorId(CarteType.Joker), 2));
+	  //ret.ajouterRoute(new Route(ret.getVilleAt(2), ret.getVilleAt(3), Colors.getColorId(CarteType.Joker), 2));
+	  ret.ajouterRoute(new Route(ret.getVilleAt(2), ret.getVilleAt(3), Colors.getColorId(CarteType.Green), 2));
 	  ret.ajouterRoute(new RouteDouble(ret.getVilleAt(3), ret.getVilleAt(4), Colors.getColorId(CarteType.White), 6,0));
 	  ret.ajouterRoute(new Route(ret.getVilleAt(3), ret.getVilleAt(8), Colors.getColorId(CarteType.Yellow), 5));
 	  
-	  ret.ajouterRoute(new Route(ret.getVilleAt(4), ret.getVilleAt(8), Colors.getColorId(CarteType.Joker), 3));
+	  //ret.ajouterRoute(new Route(ret.getVilleAt(4), ret.getVilleAt(8), Colors.getColorId(CarteType.Joker), 3));
+	  ret.ajouterRoute(new Route(ret.getVilleAt(4), ret.getVilleAt(8), Colors.getColorId(CarteType.White), 3));
 	  ret.ajouterRoute(new Route(ret.getVilleAt(8), ret.getVilleAt(12), Colors.getColorId(CarteType.Pink), 2));
 	  ret.ajouterRoute(new RouteDouble(ret.getVilleAt(12), ret.getVilleAt(11), Colors.getColorId(CarteType.Blue), 7, 0));
-	  ret.ajouterRoute(new Route(ret.getVilleAt(11), ret.getVilleAt(7), Colors.getColorId(CarteType.Joker), 1));
+	  //ret.ajouterRoute(new Route(ret.getVilleAt(11), ret.getVilleAt(7), Colors.getColorId(CarteType.Joker), 1));
+	  ret.ajouterRoute(new Route(ret.getVilleAt(11), ret.getVilleAt(7), Colors.getColorId(CarteType.Pink), 1));
 	  ret.ajouterRoute(new Route(ret.getVilleAt(7), ret.getVilleAt(6), Colors.getColorId(CarteType.Green), 2));
 	  
 	  ret.ajouterRoute(new RouteDouble(ret.getVilleAt(6), ret.getVilleAt(2), Colors.getColorId(CarteType.Blue), 5,0));

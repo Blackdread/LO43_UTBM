@@ -39,6 +39,39 @@ public class CarteJeu implements IRenderable{
 		//System.out.println("Fin render CarteJeu\n\n");
 	}
 	
+	/**
+	 * Retourne la route la plus proche du x,y
+	 * @param x
+	 * @param y
+	 * @return a copy sinon null si distance superieur a 30.0f
+	 */
+	synchronized public Route getRouteLaPlusProcheDuPoint(final int x,final int y){
+		//int i=0;
+		float min=9999999.0f, calc = 999999.0f;
+		Route tmp = null;
+		for(Route v : routes){
+			if(v != null){
+				calc = v.distance(x, y);
+				if(calc < min && calc < 30.0f){
+					min = calc;
+					//i+=1;
+					tmp=v;
+					//System.out.println("Routes cliquer: "+v.getNomVille1()+" "+v.getNomVille2()+" i"+i);
+				}
+			}
+		}
+		return tmp;
+		//return routes.get(i);
+		/*
+		if(i<0)
+			return null;
+		
+		if(routes.get(i) instanceof RouteDouble)
+			return new RouteDouble((RouteDouble)(routes.get(i)));
+		return new Route(routes.get(i));
+		//*/
+	}
+	
 	synchronized public void ajouterVille(Ville ville){
 		villes.add(ville);
 	}

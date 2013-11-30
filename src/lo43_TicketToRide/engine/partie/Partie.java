@@ -4,10 +4,16 @@ import java.util.Vector;
 
 import lo43_TicketToRide.engine.IUpdatable;
 import lo43_TicketToRide.engine.Regles;
+import lo43_TicketToRide.engine.factory.CarteType;
+import lo43_TicketToRide.utils.Colors;
 import lo43_TicketToRide.utils.Timer;
 
 /**
  * Contient tous ce qui se trouve dans une partie
+ * 
+ * Le plus simple pour changer les regles est de les faire dans les fonctions qui suivent et si on veut creer
+ * une partie avec des regles differentes, il suffit d'hériter de la classe mere et de surcharger les methodes
+ * en questions
  * 
  * @Annotation Les verifications sur piocher cartes, poser routes, etc pourraient etre fait differemment,
  * avec une classe qui contient des methodes et renvoit des boolean s'il l'action est possible.
@@ -63,7 +69,7 @@ public class Partie implements IUpdatable {
   /**
    * Max 2
    */
-  protected int compteurCarteRetourneePiocher = 0;
+  protected int compteurCarteRetourneePiocher = -1010100;
   protected boolean carteChallengesPiocher = false;
   protected boolean routePoser = false;
   
@@ -204,22 +210,118 @@ public class Partie implements IUpdatable {
 	  routePoser = false;
 	  
 	// TODO Verifier si fonction fini
+	  ajouterCarteManquanteRetournee(); // -> cas rare si toutes les cartes piocher mais personne les a utiliser
+  }
+  
+  /**
+   * Regarde les cartes du joueur et renvoi true si le joueur peut prendre une route
+   * Donc n'a pas deja piocher des cartes, etc
+   * Renvoi false si c'est une routeDouble que une des deux routes est prise et que le nb de joueur est <= 3
+   * @param routeAPrendre
+   * @return
+   */
+  synchronized public boolean isPossibleToTakeRoad(final Route routeAPrendre){
+	  if(!routePoser && compteurCarteDeckPiocher == 0 && !carteChallengesPiocher && compteurCarteRetourneePiocher == 0){
+		  if(vectJoueurs.size() <= 3){
+			  if(routeAPrendre instanceof RouteDouble){
+				  //if(((Route)routeAPrendre).isRoutePosseder() || ((RouteDouble)routeAPrendre).isRoutePosseder())
+				  if(((RouteDouble)routeAPrendre).getRoutePosserder()[0] == true || ((RouteDouble)routeAPrendre).getRoutePosserder()[1] == true)  
+					  return false;
+			  }
+			  if(routeAPrendre.isRoutePosseder())
+					  return false;
+		  }
+		  
+		  int color,color2;
+		  color = routeAPrendre.couleurNecessaireRoute;
+		  int nb = tourDuJoueur.compterNbCarteDeTelleCouleur(color);
+		  int nb3 = tourDuJoueur.compterNbCarteDeTelleCouleur(Colors.getColorId(CarteType.Joker));
+		  if(routeAPrendre instanceof RouteDouble){
+			  color2 = ((RouteDouble) routeAPrendre).couleurNecessaireRoute2;
+			  int nb2 = tourDuJoueur.compterNbCarteDeTelleCouleur(color2);
+			  
+			  if(nb + nb3 >= routeAPrendre.nbWagonNecessaire || nb2 + nb3 >= routeAPrendre.nbWagonNecessaire)
+				  return true;
+		  }else{
+			  color = routeAPrendre.couleurNecessaireRoute;
+			  nb = tourDuJoueur.compterNbCarteDeTelleCouleur(color);
+			  
+			  if(nb+ nb3 >= routeAPrendre.nbWagonNecessaire)
+				  return true;
+		  }
+	  }
+	  
+	  return false;
   }
   
   /**
    * Cherche la route tel que : carte.getRouteAt(i).equals(routeAPrendre) si true il ajoute
    * carte.getRouteAt(i) le possesseur et met routePoser a true s'il a pu ajouter le possesseur
-   * @param routeAPrendre
+   * Et enleve les cartes utiliser
+   * @param routeAPrendre Une copy de la route que l'on veut prendre
    */
-  synchronized public void prenderPossessionRoute(final Route routeAPrendre){
-	  int o = carte.getRouteSize();
-	  for(int i=0;i<o;++i)
-		  if(carte.getRouteAt(i).equals(routeAPrendre)){
-			  if(carte.getRouteAt(i).ajouterPossesseur(tourDuJoueur)){
-				  routePoser = true;
+  synchronized public void prendrePossessionRoute(final Route routeAPrendre){
+	  boolean[] a = new boolean[2];
+	  if(!routePoser){
+		  int o = carte.getRouteSize();
+		  for(int i=0;i<o;++i)
+			  if(carte.getRouteAt(i).equals(routeAPrendre)){
+				  
+				  if(routeAPrendre instanceof RouteDouble)
+					  a=((RouteDouble)routeAPrendre).getRoutePosserder();
+				  
+				  if(carte.getRouteAt(i).ajouterPossesseur(tourDuJoueur)){
+					  routePoser = true;
+					  
+					  int color;
+					  color = routeAPrendre.couleurNecessaireRoute;
+					  int nb = tourDuJoueur.compterNbCarteDeTelleCouleur(color);
+					  int nb3 = tourDuJoueur.compterNbCarteDeTelleCouleur(Colors.getColorId(CarteType.Joker));
+					  if(routeAPrendre instanceof RouteDouble){
+						  int color2 = ((RouteDouble) routeAPrendre).couleurNecessaireRoute2;
+						  int nb2 = tourDuJoueur.compterNbCarteDeTelleCouleur(color2);
+						  
+						 if(a[0] != ((RouteDouble)routeAPrendre).getRoutePosserder()[0]){
+							 // C la route simple qui a ete prise
+							 if(nb >= routeAPrendre.nbWagonNecessaire){
+								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color);
+								  break;
+							  }
+							  
+							  if(nb + nb3 >= routeAPrendre.nbWagonNecessaire){
+								  retirerCarteDuJoueur(nb,color);
+								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb,Colors.getColorId(CarteType.Joker));
+							  }
+						 }else{
+							 if(nb2 >= routeAPrendre.nbWagonNecessaire){
+								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color2);
+								  break;
+							  }
+							  
+							  if(nb2 + nb3 >= routeAPrendre.nbWagonNecessaire){
+								  retirerCarteDuJoueur(nb2,color2);
+								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb2,Colors.getColorId(CarteType.Joker));
+							  }
+						 }
+						  
+					  }else{
+						  color = routeAPrendre.couleurNecessaireRoute;
+						  nb = tourDuJoueur.compterNbCarteDeTelleCouleur(color);
+						  
+						  if(nb >= routeAPrendre.nbWagonNecessaire){
+							  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color);
+							  break;
+						  }
+						  
+						  if(nb + nb3 >= routeAPrendre.nbWagonNecessaire){
+							  retirerCarteDuJoueur(nb,color);
+							  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb,Colors.getColorId(CarteType.Joker));
+						  }
+					  }
+				  }
+				  break;
 			  }
-			  break;
-		  }
+	  }
   }
   
   /**
@@ -233,10 +335,28 @@ public class Partie implements IUpdatable {
 			  
 			  //defausse.add(deckDeCarte.get(0));
 			  tourDuJoueur.ajouterCarteWagon(deckDeCarte.remove(0));
-			  compteurCarteDeckPiocher +=1;
+			 // compteurCarteDeckPiocher +=1;
 		  }
 	  }
 	  remettreDansDeckCarteDeLaDefausse();
+  }
+  
+  /**
+   * Enleve les cartes du joueurs et les mets dans la defausse
+   * @param nbDeCarteAEnleve
+   * @param colorCarte
+   */
+  synchronized private void retirerCarteDuJoueur(int nbDeCarteAEnleve, int colorCarte){
+	  for(int i=0;i<tourDuJoueur.getNbCarte();++i)
+		  if(nbDeCarteAEnleve > 0){
+			  if(tourDuJoueur.getCarteAt(i).color == colorCarte){
+				  //System.out.println("carte retirer "+colorCarte+" et "+tourDuJoueur.getCarteAt(i).color );
+				  nbDeCarteAEnleve -=1;
+				  deckDeCarte.add(tourDuJoueur.getCarteAt(i));
+				  tourDuJoueur.retirerCarteAt(i);
+			  }
+		  }else
+			  break;
   }
   
   /**
@@ -349,17 +469,12 @@ public class Partie implements IUpdatable {
    */
   synchronized public final CarteWagon getCarteRetourneeAt(int pos){
 	  if(pos >= 0 && pos < carteRetournee.size()){
-		  // Etrange d'etre oblige de faire ca...
-		  // En faite c'est logique car je fais un new et CarteWagonJoker herite de CarteWagon donc il peut
-		  // etre transformer en CarteWagon et perdre son "instance" de CarteWagonJoker
-		  // // TODO
-		  // carteRetournee.get(pos).getClass().newInstance() => c'est peut etre ca
 		  if(carteRetournee.get(pos) instanceof CarteWagonJoker)
 			  return new CarteWagonJoker((CarteWagonJoker) carteRetournee.get(pos));
 		  return new CarteWagon(carteRetournee.get(pos));
 	  }
-	  System.err.println("getCarteRetourneeAt: erreur avec pos="+pos
-			  +"\nEst nomrmalement declenche si le deck est vide => normal");
+	  //System.err.println("getCarteRetourneeAt: erreur avec pos="+pos
+	//		  +"\nEst nomrmalement declenche si le deck est vide => normal");
 	  return null;
   }
 
