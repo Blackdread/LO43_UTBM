@@ -243,6 +243,7 @@ public class Partie implements IUpdatable {
    * Regarde les cartes du joueur et renvoi true si le joueur peut prendre une route
    * Donc n'a pas deja piocher des cartes, etc
    * Renvoi false si c'est une routeDouble que une des deux routes est prise et que le nb de joueur est <= 3
+   * Verifie que le joueur a assez de wagon
    * @param routeAPrendre
    * @return
    */
@@ -257,6 +258,8 @@ public class Partie implements IUpdatable {
 			  if(routeAPrendre.isRoutePosseder())
 					  return false;
 		  }
+		  if(tourDuJoueur.getNbWagon() < routeAPrendre.nbWagonNecessaire)
+			  return false;
 		  
 		  int color,color2;
 		  color = routeAPrendre.couleurNecessaireRoute;
@@ -311,22 +314,26 @@ public class Partie implements IUpdatable {
 							 // C la route simple qui a ete prise
 							 if(nb >= routeAPrendre.nbWagonNecessaire){
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color);
+								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
 								  break;
 							  }
 							  
 							  if(nb + nb3 >= routeAPrendre.nbWagonNecessaire){
 								  retirerCarteDuJoueur(nb,color);
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb,Colors.getColorId(CarteType.Joker));
+								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
 							  }
 						 }else{
 							 if(nb2 >= routeAPrendre.nbWagonNecessaire){
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color2);
+								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
 								  break;
 							  }
 							  
 							  if(nb2 + nb3 >= routeAPrendre.nbWagonNecessaire){
 								  retirerCarteDuJoueur(nb2,color2);
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb2,Colors.getColorId(CarteType.Joker));
+								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
 							  }
 						 }
 						  
@@ -336,12 +343,14 @@ public class Partie implements IUpdatable {
 						  
 						  if(nb >= routeAPrendre.nbWagonNecessaire){
 							  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color);
+							  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
 							  break;
 						  }
 						  
 						  if(nb + nb3 >= routeAPrendre.nbWagonNecessaire){
 							  retirerCarteDuJoueur(nb,color);
 							  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb,Colors.getColorId(CarteType.Joker));
+							  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
 						  }
 					  }
 				  }

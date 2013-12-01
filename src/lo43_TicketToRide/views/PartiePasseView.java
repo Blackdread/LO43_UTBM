@@ -52,6 +52,7 @@ public class PartiePasseView extends PartieView {
 		
 		}
 	}
+	
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);

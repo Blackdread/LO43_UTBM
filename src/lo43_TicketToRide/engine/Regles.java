@@ -22,8 +22,10 @@ public final class Regles {
 			NB_CARTE_COULEUR_DIFFERENTE + NB_CARTE_WAGON_JOKER_POUR_UNE_PARTIE;
 	
 	
-	
-	public static final int NB_WAGON_PAR_JOUEUR = 45;
+	/**
+	 * 
+	 */
+	public static final int NB_WAGON_PAR_JOUEUR = 20;
 	
 	
 	public static final int NB_CARTE_CHALLENGE = 30;

@@ -145,6 +145,10 @@ public class Joueur {
 		this.nbWagon = nbWagon;
 	}
 	
+	synchronized public void retirerWagon(int nb){
+		nbWagon -=nb;
+	}
+	
 	synchronized public void setIA(boolean isIA) {
 		this.isIA = isIA;
 	}
