@@ -225,8 +225,12 @@ public class Partie implements IUpdatable {
 	  int index = vectJoueurs.indexOf(tourDuJoueur, 0);
 	  if(index >= vectJoueurs.size()-1){
 		  tourDuJoueur = vectJoueurs.get(0);
-		  gameIsOver = true;
-		  calculerLesPointsAtEndOfGame();
+		  if(lastTurn){
+			  gameIsOver = true;
+			  calculerLesPointsAtEndOfGame();
+			  // TODO Faire changer la vue des joueurs vers la vue de fin de jeu
+			  // Voir si c'est la partie qui fait le changement ou c'est la view qui check <= preferable que c la vue
+		  }
 	  }else
 		  tourDuJoueur = vectJoueurs.get(index+1);
 	  
