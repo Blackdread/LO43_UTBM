@@ -408,7 +408,7 @@ public abstract class PartieView extends View {
 	}
 	
 	
-	protected void gotoEndPartieView() {
+	protected void gotoEndPartieView(){
 		container.setMouseGrabbed(false);
 		((EndPartieView)Game.getStateByID(Game.END_PARTIE_VIEW_ID)).setPartie(partie);
 		game.enterState(Game.END_PARTIE_VIEW_ID, new FadeOutTransition(), new FadeInTransition());

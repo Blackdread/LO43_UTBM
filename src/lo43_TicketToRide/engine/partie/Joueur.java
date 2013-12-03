@@ -153,6 +153,10 @@ public class Joueur {
 		this.isIA = isIA;
 	}
 	
+	synchronized public void ajouterPoint(int points){
+		this.score += points;
+	}
+	
 	@Override
 	synchronized public boolean equals(Object a){
 		return ((Joueur)a).color == color;

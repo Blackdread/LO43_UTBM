@@ -27,7 +27,7 @@ import lo43_TicketToRide.utils.Timer;
  */
 public class Partie implements IUpdatable {
 
-	private static final int TEMPS_MAX_PAR_TOUR = 6000; // <= pour les tests
+	private static final int TEMPS_MAX_PAR_TOUR = 6000; // <= pour les tests TODO
 	//private static final int TEMPS_MAX_PAR_TOUR = 100000;
 	protected Timer tempsDeJeu, tempsMaxParTour;
 
@@ -98,7 +98,7 @@ public class Partie implements IUpdatable {
 	  //System.out.println("Update partie");
 	  checkIsLastTurnToFire();
 	  checkFinTourJoueur();
-		  
+	  
   }
   
   /**
@@ -229,7 +229,8 @@ public class Partie implements IUpdatable {
 			  gameIsOver = true;
 			  calculerLesPointsAtEndOfGame();
 			  // TODO Faire changer la vue des joueurs vers la vue de fin de jeu
-			  // Voir si c'est la partie qui fait le changement ou c'est la view qui check <= preferable que c la vue
+			  // c'est la view qui check <= preferable que ce soit la vue
+		  
 		  }
 	  }else
 		  tourDuJoueur = vectJoueurs.get(index+1);
@@ -238,6 +239,8 @@ public class Partie implements IUpdatable {
 	  compteurCarteRetourneePiocher = 0;
 	  carteChallengesPiocher = false;
 	  routePoser = false;
+	  
+	  tempsMaxParTour.resetTime();
 	  
 	// TODO Verifier si fonction fini
 	  ajouterCarteManquanteRetournee(); // -> cas rare si toutes les cartes piocher mais personne les a utiliser
@@ -319,6 +322,7 @@ public class Partie implements IUpdatable {
 							 if(nb >= routeAPrendre.nbWagonNecessaire){
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color);
 								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
+								  donnerPointsSuivantLongueurRoutePrise(routeAPrendre.nbWagonNecessaire);
 								  break;
 							  }
 							  
@@ -326,11 +330,13 @@ public class Partie implements IUpdatable {
 								  retirerCarteDuJoueur(nb,color);
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb,Colors.getColorId(CarteType.Joker));
 								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
+								  donnerPointsSuivantLongueurRoutePrise(routeAPrendre.nbWagonNecessaire);
 							  }
 						 }else{
 							 if(nb2 >= routeAPrendre.nbWagonNecessaire){
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color2);
 								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
+								  donnerPointsSuivantLongueurRoutePrise(routeAPrendre.nbWagonNecessaire);
 								  break;
 							  }
 							  
@@ -338,6 +344,7 @@ public class Partie implements IUpdatable {
 								  retirerCarteDuJoueur(nb2,color2);
 								  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb2,Colors.getColorId(CarteType.Joker));
 								  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
+								  donnerPointsSuivantLongueurRoutePrise(routeAPrendre.nbWagonNecessaire);
 							  }
 						 }
 						  
@@ -348,6 +355,7 @@ public class Partie implements IUpdatable {
 						  if(nb >= routeAPrendre.nbWagonNecessaire){
 							  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire, color);
 							  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
+							  donnerPointsSuivantLongueurRoutePrise(routeAPrendre.nbWagonNecessaire);
 							  break;
 						  }
 						  
@@ -355,11 +363,42 @@ public class Partie implements IUpdatable {
 							  retirerCarteDuJoueur(nb,color);
 							  retirerCarteDuJoueur(routeAPrendre.nbWagonNecessaire - nb,Colors.getColorId(CarteType.Joker));
 							  tourDuJoueur.retirerWagon(routeAPrendre.nbWagonNecessaire);
+							  donnerPointsSuivantLongueurRoutePrise(routeAPrendre.nbWagonNecessaire);
 						  }
 					  }
 				  }
 				  break;
 			  }
+	  }
+  }
+  
+  synchronized protected void donnerPointsSuivantLongueurRoutePrise(int longueur){
+	  // TODO
+	  switch(longueur){
+	  case 1:
+		  tourDuJoueur.ajouterPoint(1);
+		  break;
+	  case 2:
+		  tourDuJoueur.ajouterPoint(2);
+		  break;
+	  case 3:
+		  tourDuJoueur.ajouterPoint(4);
+		  break;
+	  case 4:
+		  tourDuJoueur.ajouterPoint(7);
+		  break;
+	  case 5:
+		  tourDuJoueur.ajouterPoint(10);
+		  break;
+	  case 6:
+		  tourDuJoueur.ajouterPoint(15);
+		  break;
+	  case 7:
+		  tourDuJoueur.ajouterPoint(22);
+		  break;
+	  case 8:
+		  tourDuJoueur.ajouterPoint(30);
+		  break;
 	  }
   }
   

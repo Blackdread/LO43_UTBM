@@ -86,6 +86,7 @@ public class Game extends StateBasedGame {
 		
 		addState(new PartieSoloView());
 		addState(new PartiePasseView());
+		addState(new PartieMultiView());
 		/*
 		addState(new SoloView());
 		addState(new MultiView());

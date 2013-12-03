@@ -11,7 +11,6 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public final class PartieSoloView extends PartieView {
 
-	
 	@Override
 	public void initResources() {
 		super.initResources();
