@@ -286,7 +286,7 @@ public abstract class MainMenuView extends View {
 			// Creation de la partie
 			Partie partie = FactoryPartie.getInstance().creerPartie(joueur);
 			// Ajout de la carte de jeu
-			partie.setCarteJeu(FactoryCarteJeu.getInstance().creerCarteJeu());
+			partie.setCarteJeu(FactoryCarteJeu.getInstance().creerCarteJeu(0));
 			
 			// Creation et Ajout des cartes wagons
 			// Fait dans FactoryPartie

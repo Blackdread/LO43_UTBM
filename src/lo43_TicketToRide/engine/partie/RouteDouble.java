@@ -21,12 +21,22 @@ public class RouteDouble extends Route {
   public int getCouleurNecessaireRoute2() {
 	return couleurNecessaireRoute2;
 }
-
-public RouteDouble(Ville v1, Ville v2, int color, int wagon, int color2) {
+  /**
+   * 
+   * @param v1
+   * @param v2
+   * @param color
+   * @param wagon
+   * @param color2
+   */
+  public RouteDouble(Ville v1, Ville v2, int color, int wagon, int color2) {
 		super(v1, v2, color, wagon);
 		couleurNecessaireRoute2 = color2;
 	}
-  
+  /**
+   * 
+   * @param copy
+   */
   public RouteDouble(RouteDouble copy) {
 	  super(copy);
 	  couleurNecessaireRoute2 = copy.couleurNecessaireRoute2;
