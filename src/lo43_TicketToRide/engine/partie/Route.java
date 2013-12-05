@@ -51,8 +51,8 @@ public class Route implements IRenderable{
 	
 	@Override
 	public void render(Graphics g,final int deltaX,final int deltaY) {
-		Rectangle tmp = new Rectangle(0,0,calculerLonguerDesRectangles(),20);
-		Rectangle tmpJoueur = new Rectangle(0,0,calculerLonguerDesRectangles(),20);
+		Rectangle tmp = new Rectangle(0,0,calculerLongueurDesRectangles(),20);
+		Rectangle tmpJoueur = new Rectangle(0,0,calculerLongueurDesRectangles(),20);
 		// tmp.transform(Transform.createRotateTransform(calculerAngleEntreDeuxVilles()));
 		//g.rotate(ville1.x+deltaX, ville1.y+deltaY, Game.rot);
 		g.rotate(ville1.x+deltaX, ville1.y+deltaY, 360-calculerAngleEntreDeuxVilles());
@@ -96,7 +96,7 @@ public class Route implements IRenderable{
 		//System.out.println("route rotate:"+calculerAngleEntreDeuxVilles()+" num: "+ville1.getNomUV()+" "+ville2.getNomUV());
 	}
 	
-	protected final int calculerLonguerDesRectangles(){
+	protected final int calculerLongueurDesRectangles(){
 		//int deltaY = (int) Math.pow(ville1.getY() - ville2.getY(), 2);
 		//int deltaX = (int) Math.pow(ville1.getX() - ville2.getX(), 2);
 		

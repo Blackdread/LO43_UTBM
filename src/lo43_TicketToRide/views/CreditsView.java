@@ -1,5 +1,6 @@
 package lo43_TicketToRide.views;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -28,30 +29,26 @@ public class CreditsView extends View {
 	
 	@Override
 	public void initResources() {
-		/*
-		background = ResourceManager.getImage("background_credits_view").getScaledCopy(container.getWidth(), container.getHeight());
+		//*
+		background = ResourceManager.getImage("western").getScaledCopy(container.getWidth(), container.getHeight());
 		
-		butQuitter = new MouseOverArea(container, ResourceManager.getImage("MenuQuitterOver"), container.getWidth()/10, container.getHeight()-container.getHeight()/10 - 50, ResourceManager.getImage("MenuQuitterOver").getWidth(), ResourceManager.getImage("MenuQuitterOver").getHeight());
-		butQuitter.setMouseOverImage(ResourceManager.getImage("MenuQuitter"));
+		butQuitter = new MouseOverArea(container, ResourceManager.getImage("butQuitter"), container.getWidth()/10, container.getHeight()-container.getHeight()/10 - 50, ResourceManager.getImage("MenuQuitterOver").getWidth(), ResourceManager.getImage("MenuQuitterOver").getHeight());
+		butQuitter.setMouseOverImage(ResourceManager.getImage("butQuitterOver"));
 		butQuitter.setMouseDownSound(ResourceManager.getSound("butClick"));
-		*/
+		//*/
 	}
-
-
-	@Override
-	public int getID() {
-		return Game.CREDITS_VIEW_ID;
-	}
-
 
 	@Override
 	public void render(GameContainer container, StateBasedGame sbGame, Graphics g) throws SlickException {
-		super.render(container, game, g);
-		/*
+		
 		g.drawImage(background, 0, 0);
 		
+		g.setColor(Color.white);
+		g.drawString("Jeu crŽŽ par Yoann CAPLAIN en 2013 en 3 semaines", container.getWidth()/2-70, container.getHeight()/2-15);
+		g.drawString("CrŽŽ pour le projet de LO43", container.getWidth()/2-70, container.getHeight()/2);
+		
 		butQuitter.render(container, g);
-		//*/
+		super.render(container, game, g);
 	}
 	
 	@Override
@@ -73,4 +70,10 @@ public class CreditsView extends View {
 		game.enterState(Game.MAIN_MENU_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
 	}
 
+	
+
+	@Override
+	public int getID() {
+		return Game.CREDITS_VIEW_ID;
+	}
 }

@@ -25,7 +25,7 @@ public final class Regles {
 	/**
 	 * 
 	 */
-	public static final int NB_WAGON_PAR_JOUEUR = 5;
+	public static final int NB_WAGON_PAR_JOUEUR = 20;
 	
 	
 	public static final int NB_CARTE_CHALLENGE = 30;

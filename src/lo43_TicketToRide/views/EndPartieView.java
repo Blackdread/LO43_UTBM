@@ -45,7 +45,7 @@ public class EndPartieView extends View {
 					joueurGagnant = v;
 					max = v.getScore();
 				}
-			System.out.println("EndPartieView:enter: fait");
+			//System.out.println("EndPartieView:enter: fait");
 			
 		}else
 			System.err.println("EndPartieView:enter: partie null");
@@ -88,8 +88,9 @@ public class EndPartieView extends View {
 				}
 			}
 			
-		}else
-			System.err.println("EndPartieView:render: partie null");
+		}//else
+			// Se produit du au fait que la fonction enter n'est pas appele avant de commencer a faire render
+			//System.err.println("EndPartieView:render: null");
 		butQuitter.render(container, g);
 		
 		super.render(container, sbgame, g);

@@ -242,6 +242,10 @@ public class Partie implements IUpdatable {
 	  
 	  tempsMaxParTour.resetTime();
 	  
+	  if(tourDuJoueur.isIA()){
+		  // TODO appeller la fonction pour l'IA
+	  }
+	  
 	// TODO Verifier si fonction fini
 	  ajouterCarteManquanteRetournee(); // -> cas rare si toutes les cartes piocher mais personne les a utiliser
   }

@@ -74,8 +74,8 @@ public RouteDouble(Ville v1, Ville v2, int color, int wagon, int color2) {
 		  deltaX+=10;
 	  }*/
 	  g.setColor(Colors.getColor(couleurNecessaireRoute));
-		Rectangle tmp = new Rectangle(0,0,calculerLonguerDesRectangles(),20);
-		Rectangle tmpJoueur = new Rectangle(0,0,calculerLonguerDesRectangles(),20);
+		Rectangle tmp = new Rectangle(0,0,calculerLongueurDesRectangles(),20);
+		Rectangle tmpJoueur = new Rectangle(0,0,calculerLongueurDesRectangles(),20);
 		g.rotate(ville1.x+deltaX, ville1.y+deltaY, 360-calculerAngleEntreDeuxVilles());
 		for(int i=0;i<nbWagonNecessaire;++i){
 			//TODO A verifier

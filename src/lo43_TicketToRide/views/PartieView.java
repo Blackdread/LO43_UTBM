@@ -113,12 +113,22 @@ public abstract class PartieView extends View {
 	}
 	
 	@Override
+	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+		super.leave(container, game);
+		partie=null;
+	}
+	
+	@Override
 	public void update(GameContainer container, StateBasedGame sbGame, int delta) throws SlickException {
 		super.update(container, sbGame, delta);
 		
-		if(partie != null)// && partieEnCours)
+		if(partie != null){// && partieEnCours)
 			partie.update(delta);
-		else
+			if(partie.isGameIsOver()){
+				System.out.println("PartieView:update Changement fin de jeu fait auto");
+				gotoEndPartieView();
+			}
+		}else
 			System.err.println("PartieView partie == null");
 		
 	}
