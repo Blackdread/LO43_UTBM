@@ -1,5 +1,6 @@
 package lo43_TicketToRide.engine.partie;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 import org.newdawn.slick.Graphics;
@@ -12,13 +13,12 @@ import lo43_TicketToRide.engine.IRenderable;
  * @since 23 11 2013
  * 
  */
-public class CarteJeu implements IRenderable{
+public class CarteJeu implements IRenderable, Serializable{
 
-
-  /**
-   * 
-   * @element-type Ville
-   */
+	private static final long serialVersionUID = -1724428464393291062L;
+	/**
+	* @element-type Ville
+    */
 	protected Vector<Ville>  villes = new Vector<Ville>();
    /**
    * 

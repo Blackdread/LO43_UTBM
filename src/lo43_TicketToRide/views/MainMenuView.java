@@ -8,6 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.MouseOverArea;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.StateBasedGame;
@@ -24,6 +25,7 @@ import lo43_TicketToRide.engine.partie.Partie;
 import lo43_TicketToRide.utils.Colors;
 import lo43_TicketToRide.utils.Configuration;
 import lo43_TicketToRide.utils.ResourceManager;
+import lo43_TicketToRide.utils.Sauvegarde;
 
 
 
@@ -48,6 +50,9 @@ public abstract class MainMenuView extends View {
 	protected MouseOverArea[] switchIA = new MouseOverArea[Regles.NB_MAX_JOUEUR];
 	
 	protected TextField[] textFieldPseudo = new TextField[Regles.NB_MAX_JOUEUR];
+	
+	protected TextField textSave;
+	protected Rectangle rectSave;
 	
 	// Donner peut-etre la possibiliter au joueur de changer la couleur
 	protected int[] colors = new int[Regles.NB_MAX_JOUEUR];
@@ -111,6 +116,11 @@ public abstract class MainMenuView extends View {
 			colors[i] = i;
 		}
 		textFieldPseudo[0].setText(Configuration.getPseudo());
+		
+		
+		textSave = new TextField(container, container.getDefaultFont(), container.getWidth()-100, 200,30,20);
+		rectSave = new Rectangle(textSave.getX(),textSave.getY()+textSave.getHeight()+4,30,20);
+		textSave.setAcceptingInput(false);
 		
 		// *******************
 		// render fait dans les classes filles et la gestion aussi
@@ -303,6 +313,19 @@ public abstract class MainMenuView extends View {
 			// rejoindre
 			//Fait dans la classe fille
 		//}
+	}
+	
+	protected boolean chargerPartieSauvegarder(String file){
+		Object tmp = Sauvegarde.load(file);
+		if(tmp != null){
+			Partie partie = (Partie) tmp;
+			((PartieView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(partie);
+			((PartieView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(partie);
+			System.out.println("Ok chargement partie sauvegarder");
+			return true;
+		}else
+			System.err.println("erreur chargement partie sauvegarder");
+		return false;
 	}
 	
 	

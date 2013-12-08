@@ -1,14 +1,20 @@
 package lo43_TicketToRide.engine.partie;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author Yoann CAPLAIN
  * @since 14 11 2013
  * 
  */
-public class CarteWagon {
+public class CarteWagon implements Serializable{
 
-  protected int color;
+  /**
+   * 
+   */
+	private static final long serialVersionUID = 2206179139888856797L;
+	protected int color;
 
   public CarteWagon(){
 	  color = -1;

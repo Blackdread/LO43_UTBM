@@ -15,7 +15,20 @@ public class PartiePasseView extends PartieView {
 	@Override
 	public void initResources() {
 		super.initResources();
+		textSave.setAcceptingInput(false);
+	}
+	
+	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enter(container, game);
+		textSave.setAcceptingInput(true);
+	}
+	
+	@Override
+	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+		super.leave(container, game);
 		
+		textSave.setAcceptingInput(false);
 	}
 	
 	@Override

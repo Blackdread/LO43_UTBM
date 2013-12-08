@@ -1,5 +1,7 @@
 package lo43_TicketToRide.engine.partie;
 
+import java.io.Serializable;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Line;
@@ -16,8 +18,12 @@ import lo43_TicketToRide.utils.Colors;
  * @since 23 11 2013
  * 
  */
-public class Route implements IRenderable{
+public class Route implements IRenderable, Serializable{
   
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6066784805826120870L;
 	protected static final int WIDTH_MIN_ROUTE = 10;
 	protected static final int WIDTH_MAX_ROUTE = 30;
 

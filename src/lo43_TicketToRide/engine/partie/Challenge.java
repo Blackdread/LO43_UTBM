@@ -1,13 +1,20 @@
 package lo43_TicketToRide.engine.partie;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author Yoann CAPLAIN
  * @since 23 11 2013
  * 
  */
-public class Challenge {
+public class Challenge implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2546823565778080558L;
+
 	protected int points;
 
 	protected Ville arrivee;

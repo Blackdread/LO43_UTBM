@@ -1,5 +1,6 @@
 package lo43_TicketToRide.engine.partie;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 import lo43_TicketToRide.engine.IUpdatable;
@@ -25,8 +26,10 @@ import lo43_TicketToRide.utils.Timer;
  * @since 23 11 2013
  * 
  */
-public class Partie implements IUpdatable {
-
+public class Partie implements IUpdatable, Serializable {
+	
+	private static final long serialVersionUID = -4317180942233324696L;
+	
 	private static final int TEMPS_MAX_PAR_TOUR = 6000; // <= pour les tests TODO
 	//private static final int TEMPS_MAX_PAR_TOUR = 100000;
 	protected Timer tempsDeJeu, tempsMaxParTour;

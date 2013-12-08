@@ -38,6 +38,7 @@ public class MainMenuPasseView extends MainMenuView {
 		super.enter(container, game);
 		for(int i=1;i<Regles.NB_MAX_JOUEUR;i++)
 			super.textFieldPseudo[i].setAcceptingInput(true);
+		textSave.setAcceptingInput(true);
 		//System.out.println("Enter passe");
 	}
 	
@@ -46,6 +47,7 @@ public class MainMenuPasseView extends MainMenuView {
 		super.leave(container, game);
 		for(int i=1;i<Regles.NB_MAX_JOUEUR;i++)
 			super.textFieldPseudo[i].setAcceptingInput(false);
+		textSave.setAcceptingInput(false);
 		//System.out.println("Leave passe");
 	}
 	
@@ -63,6 +65,11 @@ public class MainMenuPasseView extends MainMenuView {
 		super.afficherSwitchIA(g);
 		super.afficherPseudo(g);
 		super.afficherCouleur(g);
+		
+		g.setColor(Color.red);
+		textSave.render(container, g);
+		g.draw(rectSave);
+		g.drawString("go", rectSave.getX()+1, rectSave.getY()+1);
 		
 		g.setColor(Color.black);
 		g.drawString("Pseudo doit etre different de IA*** pour compter comme joueur (nb "+nbJoueur()+")", textFieldPseudo[0].getX(), textFieldPseudo[0].getY()+19);
@@ -86,6 +93,12 @@ public class MainMenuPasseView extends MainMenuView {
 		super.mousePressed(button, x, y);
 		
 		super.switchIA();
+		
+		if(rectSave.contains(x, y))
+			if(chargerPartieSauvegarder("saves/"+textSave.getText()+".sav")){
+				container.setMouseGrabbed(false);
+				game.enterState(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID, new FadeOutTransition(), new FadeInTransition());
+			}
 	}
 	
 	@Override

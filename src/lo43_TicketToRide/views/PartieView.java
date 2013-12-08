@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.RoundedRectangle;
 import org.newdawn.slick.gui.MouseOverArea;
+import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
@@ -26,6 +27,7 @@ import lo43_TicketToRide.engine.partie.Partie;
 import lo43_TicketToRide.engine.partie.Route;
 import lo43_TicketToRide.utils.Colors;
 import lo43_TicketToRide.utils.ResourceManager;
+import lo43_TicketToRide.utils.Sauvegarde;
 
 
 
@@ -53,6 +55,9 @@ public abstract class PartieView extends View {
 	
 	protected Rectangle shapeBas, shapeVoirSesChal, shapeArreterGame;
 	protected RoundedRectangle rectCarteJeu;
+	
+	protected TextField textSave;
+	protected Rectangle rectSave;
 	
 	/**
 	 * Juste pour laisser un delay
@@ -89,6 +94,10 @@ public abstract class PartieView extends View {
 		for(int i=0;i<Regles.NB_MAX_JOUEUR;++i){
 			shapeJoueur[i] = new Rectangle(100 + (margin + largCarte)*i, margin,largCarte,hautCarte);
 		}
+		
+		textSave = new TextField(container, container.getDefaultFont(), container.getWidth()-60, container.getHeight()-80,30,20);
+		rectSave = new Rectangle(textSave.getX(),textSave.getY()+textSave.getHeight()+4,50,20);
+		textSave.setAcceptingInput(false);
 		
 		shapeBas = new Rectangle(10,container.getHeight()-125,container.getWidth()-100,120);
 		
@@ -137,6 +146,11 @@ public abstract class PartieView extends View {
 	public void render(GameContainer container, StateBasedGame sbgame, Graphics g) throws SlickException {
 		g.drawImage(background, 0, 0);
 
+		g.setColor(Color.red);
+		textSave.render(container, g);
+		g.draw(rectSave);
+		g.drawString("save", rectSave.getX()+1, rectSave.getY()+1);
+		
 		g.setColor(Color.black);
 		butDeckChallenge.render(container, g);
 		g.drawString(""+partie.getDeckChallengeSize(), butDeckChallenge.getX()+5, butDeckChallenge.getY()+5);
@@ -230,7 +244,16 @@ public abstract class PartieView extends View {
 				partie.forcerFinGame();
 				gotoEndPartieView();
 			}
+			if(rectSave.contains(x, y))
+				if(!textSave.getText().equalsIgnoreCase(""))
+					if(!Sauvegarde.save(("saves/"+textSave.getText()+".sav"), partie)){
+						System.err.println("erreur sauvegarde");
+					}else{
+						textSave.setText("");
+						System.out.println("ok sauvegarde");
+					}
 		}
+		
 		
 		
 	}

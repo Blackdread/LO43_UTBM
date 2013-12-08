@@ -18,6 +18,19 @@ public final class PartieSoloView extends PartieView {
 	}
 	
 	@Override
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+		super.enter(container, game);
+		textSave.setAcceptingInput(true);
+	}
+	
+	@Override
+	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+		super.leave(container, game);
+		
+		textSave.setAcceptingInput(false);
+	}
+	
+	@Override
 	public void update(GameContainer container, StateBasedGame sbGame, int delta) throws SlickException {
 		super.update(container, sbGame, delta);
 		
@@ -28,7 +41,9 @@ public final class PartieSoloView extends PartieView {
 	public void render(GameContainer container, StateBasedGame sbgame, Graphics g) throws SlickException {
 		super.render(container, sbgame, g);
 		
-		afficherInfoPersoJoueur(g,partie.getJoueurAt(0).getColor());
+		Joueur tmp = partie.getJoueurAt(0);
+		if(tmp != null)
+			afficherInfoPersoJoueur(g,tmp.getColor());
 		
 		if(afficherSelectionChallenge){
 			afficherChallengesPourLesPiocher(g);

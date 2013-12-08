@@ -1,5 +1,7 @@
 package lo43_TicketToRide.engine.partie;
 
+import java.io.Serializable;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -12,8 +14,12 @@ import lo43_TicketToRide.engine.IRenderable;
  * @since 23 11 2013
  * 
  */
-public class Ville implements IRenderable, IPosition{
+public class Ville implements IRenderable, IPosition, Serializable{
   
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2973170336488215261L;
 	protected int x,y;
   protected String nomUV;
 
