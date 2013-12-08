@@ -45,22 +45,22 @@ public class FactoryCarteJeu {
 	  ret.ajouterVille(new Ville("RE43"));
 	  ret.ajouterVille(new Ville("RE42"));
 	  
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
+	  ret.ajouterVille(new Ville("AG44"));
+	  ret.ajouterVille(new Ville("BD40"));
+	  ret.ajouterVille(new Ville("LP40"));
+	  ret.ajouterVille(new Ville("MI41"));
+	  ret.ajouterVille(new Ville("MT42"));
 	  
 	  ret.ajouterVille(new Ville("XE03"));
 	  ret.ajouterVille(new Ville("XC00"));
-	  ret.ajouterVille(new Ville("X00"));
+	  ret.ajouterVille(new Ville("XE02"));
 	  
 	  // Ville ajouter pour faire plus
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
-	  ret.ajouterVille(new Ville("LO41"));
+	  ret.ajouterVille(new Ville("RE52"));
+	  ret.ajouterVille(new Ville("RE55"));
+	  ret.ajouterVille(new Ville("LO51"));
+	  ret.ajouterVille(new Ville("LO52"));
+	  ret.ajouterVille(new Ville("LO54"));
 	  
 	  
 	  int xx = 4;
@@ -98,7 +98,7 @@ public class FactoryCarteJeu {
 	  //ret.ajouterRoute(new Route(ret.getVilleAt(4), ret.getVilleAt(8), Colors.getColorId(CarteType.Joker), 3));
 	  ret.ajouterRoute(new Route(ret.getVilleAt(4), ret.getVilleAt(8), Colors.getColorId(CarteType.White), 3));
 	  ret.ajouterRoute(new Route(ret.getVilleAt(8), ret.getVilleAt(12), Colors.getColorId(CarteType.Pink), 2));
-	  ret.ajouterRoute(new RouteDouble(ret.getVilleAt(12), ret.getVilleAt(11), Colors.getColorId(CarteType.Blue), 7, 0));
+	  ret.ajouterRoute(new RouteDouble(ret.getVilleAt(12), ret.getVilleAt(11), Colors.getColorId(CarteType.Orange), 7, 0));
 	  //ret.ajouterRoute(new Route(ret.getVilleAt(11), ret.getVilleAt(7), Colors.getColorId(CarteType.Joker), 1));
 	  ret.ajouterRoute(new Route(ret.getVilleAt(11), ret.getVilleAt(7), Colors.getColorId(CarteType.Pink), 1));
 	  ret.ajouterRoute(new Route(ret.getVilleAt(7), ret.getVilleAt(6), Colors.getColorId(CarteType.Green), 2));

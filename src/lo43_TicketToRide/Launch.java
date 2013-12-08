@@ -22,10 +22,13 @@ public class Launch {
 		//*
 		try {
 			Game g;
-			//if(System.getProperties().getProperty("os.name").equalsIgnoreCase("Mac OS X"))
+			// Ou utilise la proprite : file.separator=\
+			String OSname = System.getProperties().getProperty("os.name");
+			if(OSname.equalsIgnoreCase("Mac OS X") || OSname.startsWith("linux")){
+				// Linux supporte les / normalement
 				g = new Game("config/config.properties", "resources/");
-			//else
-				//g = new Game("config/config.properties", "libs/resources.jar");
+			}else
+				g = new Game("config\\config.properties", "resources\\");
 			
 			g.launch();
 		} catch (IOException e) {

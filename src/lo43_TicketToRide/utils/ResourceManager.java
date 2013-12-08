@@ -46,6 +46,7 @@ import org.newdawn.slick.particles.ParticleSystem;
  * @TODO Mal penser encore -> il charge que ce qui se trouve apres les dossiers "images" "sprites" etc mais si on veut rajouter des
  * dossier il ne sera pas en mesure de charger ce qui se trouve plus loin
  * 
+ * et utilise la proprite : file.separator=\
  * 
  * @author Yoann CAPLAIN
  * @author Kevin
@@ -66,6 +67,8 @@ public class ResourceManager {
 
 	/**
 	 * Initialize the content of the resources list.
+	 * 
+	 * TODO utilise la proprite : file.separator=\
 	 * 
 	 * @param filesLocation
 	 *            The location of files.

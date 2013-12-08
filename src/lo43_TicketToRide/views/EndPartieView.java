@@ -83,7 +83,7 @@ public class EndPartieView extends View {
 			int i=0;
 			for(Joueur v : partie.getJoueurs()){
 				if(!v.equals(joueurGagnant)){
-					g.drawString(""+v.getPseudo()+" "+v.getScore(), container.getWidth()/nb+i*80, container.getHeight()/3+40);
+					g.drawString(""+v.getPseudo()+" "+v.getScore(), container.getWidth()/nb+i*120, container.getHeight()/3+40);
 					i++;
 				}
 			}
