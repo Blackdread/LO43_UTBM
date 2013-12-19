@@ -41,6 +41,7 @@ import lo43_TicketToRide.utils.Sauvegarde;
 public abstract class PartieView extends View {
 
 	private Image background;
+	private Image backgroundUTBM;
 	protected MouseOverArea butDeckWagon, butDeckChallenge;
 	/**
 	 * Rectangle car on affiche juste une couleur
@@ -59,7 +60,7 @@ public abstract class PartieView extends View {
 	protected TextField textSave;
 	protected Rectangle rectSave;
 	
-	/**
+	/*
 	 * Juste pour laisser un delay
 	 */
 	//protected boolean partieEnCours = false;
@@ -106,6 +107,8 @@ public abstract class PartieView extends View {
 		int width = (int) (shapeCarteRetournee[0].getX() - 30);
 		int height = (int)(shapeBas.getY()-y) - 10;
 		rectCarteJeu = new RoundedRectangle(10,y, width,height,10);
+		
+		backgroundUTBM = ResourceManager.getImage("map").getScaledCopy(width, height);
 		
 		shapeVoirSesChal = new Rectangle(shapeBas.getX()+shapeBas.getWidth()-105,shapeBas.getY()+40,95,40);
 		
@@ -165,6 +168,7 @@ public abstract class PartieView extends View {
 		
 		afficherJoueurs(g);
 		
+		g.drawImage(backgroundUTBM, rectCarteJeu.getX(), rectCarteJeu.getY());
 		g.setColor(Color.black);
 		g.draw(rectCarteJeu);
 		
@@ -189,6 +193,11 @@ public abstract class PartieView extends View {
 		g.drawString(""+partie.getTempsDeJeu().getTimeFromDeltaStock(), shapeBas.getX()+10, shapeBas.getY()+20);
 		g.drawString("Fin du tour dans", shapeBas.getX()+10, shapeBas.getY()+45);
 		g.drawString(""+partie.getTempsMaxParTour().getTimeLeftToEventTime(), shapeBas.getX()+10, shapeBas.getY()+60);
+		
+		if(afficherSelectionChallenge){
+			afficherChallengesPourLesPiocher(g);
+			butOkChallenges.render(container, g);
+		}
 		
 		super.render(container, sbgame, g);
 	}
@@ -231,6 +240,7 @@ public abstract class PartieView extends View {
 		if(Input.MOUSE_LEFT_BUTTON == button){
 			Route tmp = partie.getCarteJeu().getRouteLaPlusProcheDuPoint(x-(int)rectCarteJeu.getX(), y-(int)rectCarteJeu.getY()-10);
 			//Route tmp = partie.getCarteJeu().getRouteLaPlusProcheDuPoint(x, y);
+			if(!afficherSelectionChallenge)
 			if(tmp != null)
 				if(partie.isPossibleToTakeRoad(tmp)){
 					partie.prendrePossessionRoute(tmp);
@@ -240,7 +250,6 @@ public abstract class PartieView extends View {
 			
 			if(shapeArreterGame.contains(x, y)){
 				// TODO differents un peu pour le multi
-				// TODO 
 				partie.forcerFinGame();
 				gotoEndPartieView();
 			}
@@ -253,9 +262,6 @@ public abstract class PartieView extends View {
 						System.out.println("ok sauvegarde");
 					}
 		}
-		
-		
-		
 	}
 	
 	protected void afficherJoueurs(Graphics g){

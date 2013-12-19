@@ -21,9 +21,7 @@ import lo43_TicketToRide.utils.Configuration;
 
 /**
  * This class represent advance game state like "in game" phases.
- * 
  * @author Yoann CAPLAIN
- * 
  */
 public abstract class View extends BasicGameState {
 
@@ -85,11 +83,8 @@ public abstract class View extends BasicGameState {
 
 	/**
 	 * Developer must initialize the state resources here.
-	 * 
-	 * @param container
-	 *            The game container associated to the game context.
-	 * @param game
-	 *            The Game context.
+	 * @param container The game container associated to the game context.
+	 * @param game The Game context.
 	 */
 	public abstract void initResources();
 

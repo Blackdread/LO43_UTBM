@@ -7,6 +7,7 @@ import lo43_TicketToRide.engine.partie.Joueur;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class PartiePasseView extends PartieView {
@@ -32,45 +33,26 @@ public class PartiePasseView extends PartieView {
 	}
 	
 	@Override
-	public void update(GameContainer container, StateBasedGame sbGame, int delta) throws SlickException {
-		super.update(container, sbGame, delta);
-		
-		
-	}
-	
-	@Override
 	public void render(GameContainer container, StateBasedGame sbgame, Graphics g) throws SlickException {
 		super.render(container, sbgame, g);
 		
 		if(!partie.getTourDuJoueur().isIA())
 			afficherInfoPersoJoueur(g,partie.getTourDuJoueur().getColor());
 		
-		if(afficherSelectionChallenge){
-			afficherChallengesPourLesPiocher(g);
-			butOkChallenges.render(container, g);
-		}
-		
-	}
-	
-	@Override
-	public void mouseMoved(int oldx, int oldy, int newx, int newy){
-		super.mouseMoved(oldx, oldy, newx, newy);
-		
-	}
-	
-	@Override
-	public void keyPressed(int key, char c) {
-		super.keyPressed(key, c);
-		switch(key){
-		
-		}
 	}
 	
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		super.mousePressed(button, x, y);
+		//System.out.println("PartiePasseView mousePressed "+x+" "+y);
 		
-		if(butDeckChallenge.isMouseOver() ){
+		/* test
+		if(partie.getTourDuJoueur().getChallenges().remove(0).isChallengeSucceeded(partie.getCarteJeu(), partie.getTourDuJoueur().getColor()))
+			System.out.println("OK OK OK");
+		else
+			System.out.println("PAS PAS PAS OK OK OK");
+		*/
+		if(butDeckChallenge.isMouseOver() || new Rectangle(butDeckChallenge.getX(),butDeckChallenge.getY(),butDeckChallenge.getWidth(),butDeckChallenge.getHeight()).contains(x, y)){
 			// TODO
 			if(!afficherSelectionChallenge){
 				Joueur tmp = partie.getTourDuJoueur();
@@ -79,11 +61,11 @@ public class PartiePasseView extends PartieView {
 					butOkChallenges.setAcceptingInput(true);
 				}
 			}
-		}else if(butDeckWagon.isMouseOver()){
+		}else if(butDeckWagon.isMouseOver() || new Rectangle(butDeckWagon.getX(),butDeckWagon.getY(),butDeckWagon.getWidth(),butDeckWagon.getHeight()).contains(x, y)){
 			Joueur tmp = partie.getTourDuJoueur();
 			if(!tmp.isIA())
 				partie.piocherCarteDeck();
-		}else if(butOkChallenges.isMouseOver() && butOkChallenges.isAcceptingInput()){
+		}else if((butOkChallenges.isMouseOver() || new Rectangle(butOkChallenges.getX(),butOkChallenges.getY(),butOkChallenges.getWidth(),butOkChallenges.getHeight()).contains(x, y)) && butOkChallenges.isAcceptingInput() && afficherSelectionChallenge){
 			Joueur tmp = partie.getTourDuJoueur();
 			if(!tmp.isIA()){
 				partie.piocherChallengesSelectionne(isChallengeSelected[0], isChallengeSelected[1], isChallengeSelected[2]);

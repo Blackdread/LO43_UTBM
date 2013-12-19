@@ -10,7 +10,6 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import lo43_TicketToRide.engine.Game;
 import lo43_TicketToRide.utils.ResourceManager;
-import lo43_TicketToRide.utils.Timer;
 
 /**
  * 
@@ -31,7 +30,8 @@ public class RegleView extends View{
 		super.render(container, game, g);
 		g.drawImage(background, 0, 0);
 		g.setColor(Color.red);
-		g.drawString("Mettre les règles", container.getWidth() / 2 - 90, container.getHeight() / 2 + 40);
+		g.drawString("Voir les règles sur le site officiel de Ticket To Ride", container.getWidth() / 2 - 150, container.getHeight() / 2 - 20);
+		g.drawString("Version de base", container.getWidth() / 2 - 90, container.getHeight() / 2 );
 	}
 	@Override
 	public void update(GameContainer container, StateBasedGame sbGame, int delta) throws SlickException {

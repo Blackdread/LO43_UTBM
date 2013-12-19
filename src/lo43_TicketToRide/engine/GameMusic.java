@@ -3,6 +3,11 @@ package lo43_TicketToRide.engine;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Joue les musics du jeu / il est possible d'automatiquement changer de musique a la fin d'une autre etc
+ * @author Yoann CAPLAIN
+ * @since 12 10 2012
+ */
 public class GameMusic {
 	private static Music mainTheme;
 

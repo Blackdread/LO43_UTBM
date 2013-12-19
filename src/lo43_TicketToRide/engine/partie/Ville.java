@@ -16,12 +16,9 @@ import lo43_TicketToRide.engine.IRenderable;
  */
 public class Ville implements IRenderable, IPosition, Serializable{
   
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2973170336488215261L;
 	protected int x,y;
-  protected String nomUV;
+    protected String nomUV;
 
   
   public Ville(String nom){
@@ -72,6 +69,13 @@ public class Ville implements IRenderable, IPosition, Serializable{
 		this.y = (int)y;
 	}
   
+	@Override
+	public boolean equals(Object a){
+		if(a instanceof Ville)
+			if(nomUV.equalsIgnoreCase(((Ville)a).nomUV))
+				return true;
+		return false;
+	}
   
   
 }

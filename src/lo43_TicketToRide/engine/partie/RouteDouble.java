@@ -14,7 +14,9 @@ import org.newdawn.slick.geom.Rectangle;
  */
 public class RouteDouble extends Route {
 
-  protected int couleurNecessaireRoute2;
+	private static final long serialVersionUID = -686164755849323569L;
+
+	protected int couleurNecessaireRoute2;
 
   protected Joueur possederPar2;
 

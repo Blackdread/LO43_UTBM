@@ -1,6 +1,7 @@
 package lo43_TicketToRide.engine.partie;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import org.newdawn.slick.Graphics;
@@ -40,6 +41,72 @@ public class CarteJeu implements IRenderable, Serializable{
 	}
 	
 	/**
+	 * Cherche a rejoindre les deux villes par les routes posseder par le joueur qui a cette couleur.
+	 * C'est une fonction recursive qui chercher a relier les deux villes, ne passe jamais par la meme ville
+	 * @param a ville de depart
+	 * @param b ville arrivee
+	 * @param villeVisitee A mettre a null sur le premier appel
+	 * @return
+	 */
+	public boolean isPossibleToJoinTwoVille(final Ville a, final Ville b, final int colorOfPlayer, Vector<Ville> villeVisitee){
+		if(villeVisitee == null)
+			villeVisitee = new Vector<Ville>();
+		
+		if(a.equals(b))
+			return true;
+		// TODO pas sur que ce soit juste l''algo ecrit ici
+		ArrayList<Boolean> results = new ArrayList<Boolean>();
+		
+		for(Route v : getRouteRelieAVille(a))
+			if(v != null){
+				if(!a.equals(v.ville1))
+					if(!villeVisitee.contains(v.ville1))//{ // si pas deja visitee
+						continue;
+				if(!a.equals(v.ville2))
+					if(!villeVisitee.contains(v.ville2))
+						continue;
+					
+					villeVisitee.add(a);
+					if(v.possederPar != null){
+						if(v.possederPar.color == colorOfPlayer){
+							if(a.equals(v.ville1))
+								results.add(isPossibleToJoinTwoVille(v.ville2,b,colorOfPlayer,villeVisitee));
+							else
+								results.add(isPossibleToJoinTwoVille(v.ville1,b,colorOfPlayer,villeVisitee));
+						}
+					}
+					if(v instanceof RouteDouble)
+						if(((RouteDouble)v).possederPar2 != null){
+							if(((RouteDouble)v).possederPar2.color == colorOfPlayer){
+								if(a.equals(v.ville1))
+									results.add(isPossibleToJoinTwoVille(v.ville2,b,colorOfPlayer,villeVisitee));
+								else
+									results.add(isPossibleToJoinTwoVille(v.ville1,b,colorOfPlayer,villeVisitee));
+							}
+						}
+				//}
+			}
+		for(Boolean k : results)
+			if(k == true)
+				return true;
+		return false;
+	}
+	
+	/**
+	 * Retourne une liste des routes relier a la ville passee en parametre
+	 * @param ville
+	 * @return
+	 */
+	private Vector<Route> getRouteRelieAVille(Ville ville){
+		Vector<Route>  tmp = new Vector<Route>();
+		for(Route v : routes)
+			if(v != null)
+				if(v.ville1.equals(ville) || v.ville2.equals(ville))
+					tmp.add(v);
+		return tmp;
+	}
+	
+	/**
 	 * Retourne la route la plus proche du x,y
 	 * @param x
 	 * @param y
@@ -70,6 +137,31 @@ public class CarteJeu implements IRenderable, Serializable{
 			return new RouteDouble((RouteDouble)(routes.get(i)));
 		return new Route(routes.get(i));
 		//*/
+	}
+	
+	/**
+	 * Pour connaitre les routes que le joueur peut prendre avec ses cartes (et route non prise)
+	 * @param joueur
+	 * @return
+	 */
+	synchronized public Vector<Route> getRoutePossibleDePrendre(Joueur joueur){
+		Vector<Route>  tmp = new Vector<Route>();
+		for(Route v : routes)
+			if(v != null ){
+				if(v instanceof Route){
+					if(v.isRoutePosseder())
+						continue;
+					if(v.nbWagonNecessaire <= joueur.compterNbCarteDeTelleCouleur(v.couleurNecessaireRoute))
+						tmp.add(v);
+				}
+				if(v instanceof RouteDouble){
+					if(((RouteDouble)v).possederPar2 != null)
+						continue;
+					if(v.nbWagonNecessaire <= joueur.compterNbCarteDeTelleCouleur(v.couleurNecessaireRoute))
+						tmp.add(v);
+				}
+			}
+		return tmp;
 	}
 	
 	synchronized public void ajouterVille(Ville ville){

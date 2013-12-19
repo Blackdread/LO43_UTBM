@@ -4,8 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class Sauvegarde {
+public class Sauvegarde{
 
 	/**
 	 * Sauvegarde l'objet dans fileLocation
@@ -13,12 +14,14 @@ public class Sauvegarde {
 	 * @param ob objet a sauvegarder
 	 * @return 
 	 */
-	public static boolean save(String fileLocation, Object ob){
+	public static boolean save(String fileLocation, Serializable ob){
         try{
             FileOutputStream fos = new FileOutputStream(fileLocation);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
             oos.writeObject(ob);
+            oos.flush();
+            
 
             oos.close();
             return true;
@@ -37,7 +40,7 @@ public class Sauvegarde {
             ObjectInputStream oos = new ObjectInputStream(fos);
             
             ob = oos.readObject();
-
+            
             oos.close();
         }catch(Exception e){e.printStackTrace();}
         return ob;

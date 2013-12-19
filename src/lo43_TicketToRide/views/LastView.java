@@ -36,6 +36,9 @@ public class LastView extends View{
 		super.render(container, game, g);
 		g.drawImage(background, 0, 0);
 		g.setColor(Color.red);
+		
+		g.drawString("Jeu creer par Yoann CAPLAIN pour l'UV LO43 UTBM en 2013", container.getWidth() / 2 - 200, container.getHeight() / 2 - 40);
+		
 		if(ready)
 			g.drawString("Press a key or click", container.getWidth() / 2 - 90, container.getHeight() / 2 + 40);
 	}

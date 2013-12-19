@@ -30,6 +30,9 @@ public class EndPartieView extends View {
 		int larg = tmp.getWidth();
 		int haut = tmp.getHeight();
 		
+		partie = null;
+		joueurGagnant = null;
+		
 		butQuitter = new MouseOverArea(container, tmp, 50, container.getHeight() - 50 - haut, larg, haut);
 		butQuitter.setMouseOverImage(ResourceManager.getImage("butQuitterOver"));
 		butQuitter.setMouseDownSound(ResourceManager.getSound("butClick"));
@@ -51,16 +54,23 @@ public class EndPartieView extends View {
 			System.err.println("EndPartieView:enter: partie null");
 		
 		//*
-		((PartieView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(null);
-		((PartieView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(null);
-		((PartieView)Game.getStateByID(Game.PARTIE_MULTI_VIEW_ID)).setPartie(null);
+		((PartieSoloView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(null);
+		((PartiePasseView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(null);
+		((PartieMultiView)Game.getStateByID(Game.PARTIE_MULTI_VIEW_ID)).setPartie(null);
+		System.gc();
 		//*/
 	}
 	
 	@Override
 	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
 		super.leave(container, game);
+		((PartieView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(null);
+		((PartieView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(null);
+		((PartieView)Game.getStateByID(Game.PARTIE_MULTI_VIEW_ID)).setPartie(null);
 		partie=null;
+		if(((MainMenuMultiView)Game.getStateByID(Game.MAIN_MENU_MULTI_VIEW_ID)).server != null)
+			((MainMenuMultiView)Game.getStateByID(Game.MAIN_MENU_MULTI_VIEW_ID)).server.stopServer();
+		System.gc();
 	}
 	
 	@Override

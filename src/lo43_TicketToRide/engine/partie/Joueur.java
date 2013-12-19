@@ -14,11 +14,10 @@ import lo43_TicketToRide.engine.Regles;
  * 
  */
 public class Joueur implements Serializable{
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5581253891375227186L;
+	private static final long serialVersionUID = 1222L;
 	protected String pseudo;
 	/**
 	 * Unique par joueur (comme une id)
@@ -26,6 +25,10 @@ public class Joueur implements Serializable{
 	protected int color;
 	protected int score;
 	protected int nbWagon = Regles.NB_WAGON_PAR_JOUEUR;
+	
+	/**
+	 * N'est plus utile depuis creation de IA
+	 */
 	protected boolean isIA;
 	/**
 	 * 
@@ -42,6 +45,7 @@ public class Joueur implements Serializable{
 		super();
 		this.pseudo = pseudo;
 		isIA = false;
+		color = -1;
 	}
 
 
@@ -164,7 +168,9 @@ public class Joueur implements Serializable{
 
 	@Override
 	synchronized public boolean equals(Object a){
-		return ((Joueur)a).color == color;
+		if(a instanceof Joueur)
+			return ((Joueur)a).color == color;
+		return false;
 	}
 
 }

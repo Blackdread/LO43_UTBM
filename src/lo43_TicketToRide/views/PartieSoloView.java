@@ -45,10 +45,11 @@ public final class PartieSoloView extends PartieView {
 		if(tmp != null)
 			afficherInfoPersoJoueur(g,tmp.getColor());
 		
+		/* mis dans classe mere
 		if(afficherSelectionChallenge){
 			afficherChallengesPourLesPiocher(g);
 			butOkChallenges.render(container, g);
-		}
+		}*/
 		
 	}
 	

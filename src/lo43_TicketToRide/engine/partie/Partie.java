@@ -30,36 +30,36 @@ public class Partie implements IUpdatable, Serializable {
 	
 	private static final long serialVersionUID = -4317180942233324696L;
 	
-	private static final int TEMPS_MAX_PAR_TOUR = 6000; // <= pour les tests TODO
-	//private static final int TEMPS_MAX_PAR_TOUR = 100000;
+	private static final int TEMPS_MAX_PAR_TOUR = 12000; // <= pour les tests,temps court TODO
+	//private static final int TEMPS_MAX_PAR_TOUR = 50000;
 	protected Timer tempsDeJeu, tempsMaxParTour;
 
    /**
    * 
    * @element-type Challenge
    */
-  protected Vector<Challenge>  challenges = new Vector<Challenge>(Regles.NB_CARTE_CHALLENGE);
+  protected Vector<Challenge>  challenges;
   protected CarteJeu carte;
    /**
    * 
    * @element-type Joueur
    */
-  protected static Vector<Joueur>  vectJoueurs = new Vector<Joueur>(Regles.NB_MAX_JOUEUR);
+  protected Vector<Joueur>  vectJoueurs;
    /**
    * 
    * @element-type CarteWagon
    */
-  protected Vector<CarteWagon>  deckDeCarte = new Vector<CarteWagon>(Regles.NB_TOTAL_CARTE_WAGON_POUR_UNE_PARTIE);
+  protected Vector<CarteWagon>  deckDeCarte;
   /**
    * 
    * @element-type CarteWagon
    */
-  protected Vector<CarteWagon>  defausse = new Vector<CarteWagon>();
+  protected Vector<CarteWagon>  defausse;
    /**
    * 
    * @element-type CarteWagon
    */
-  protected Vector<CarteWagon> carteRetournee = new Vector<CarteWagon>(Regles.NB_MAX_CARTE_RETOURNEE);
+  protected Vector<CarteWagon> carteRetournee;
   protected Joueur tourDuJoueur;
 
   /**
@@ -85,6 +85,11 @@ public class Partie implements IUpdatable, Serializable {
   public Partie(){
 	  tempsDeJeu = new Timer(999999999);
 	  tempsMaxParTour = new Timer(TEMPS_MAX_PAR_TOUR);
+	  challenges = new Vector<Challenge>(Regles.NB_CARTE_CHALLENGE);
+	  vectJoueurs = new Vector<Joueur>(Regles.NB_MAX_JOUEUR);
+	  deckDeCarte = new Vector<CarteWagon>(Regles.NB_TOTAL_CARTE_WAGON_POUR_UNE_PARTIE);
+	  defausse = new Vector<CarteWagon>();
+	  carteRetournee = new Vector<CarteWagon>(Regles.NB_MAX_CARTE_RETOURNEE);
   }
   
   @Override
@@ -233,7 +238,6 @@ public class Partie implements IUpdatable, Serializable {
 			  calculerLesPointsAtEndOfGame();
 			  // TODO Faire changer la vue des joueurs vers la vue de fin de jeu
 			  // c'est la view qui check <= preferable que ce soit la vue
-		  
 		  }
 	  }else
 		  tourDuJoueur = vectJoueurs.get(index+1);
@@ -245,8 +249,11 @@ public class Partie implements IUpdatable, Serializable {
 	  
 	  tempsMaxParTour.resetTime();
 	  
-	  if(tourDuJoueur.isIA()){
-		  // TODO appeller la fonction pour l'IA
+	  if(tourDuJoueur instanceof IA){
+		  ((IA)tourDuJoueur).faireUneAction(this);
+		  
+		  // Pour le moment car l'ia ne fait rien
+		 // finTourJoueur();
 	  }
 	  
 	// TODO Verifier si fonction fini
@@ -449,21 +456,24 @@ public class Partie implements IUpdatable, Serializable {
    * et ajoute une carte retournee depuis le deck
    * @Annotation Verification par rapport aux regles fais
    * @param pos Position carte
+   * @return true si la pioche s'est bien passe
    */
-  synchronized public void piocherCarteRetournee(int pos) {
+  synchronized public boolean piocherCarteRetournee(int pos) {
+	  boolean retour=false;
 	  if(carteRetournee.size() > 0 && pos >= 0 && pos < carteRetournee.size() && tourDuJoueur != null
 			  && !carteChallengesPiocher && !routePoser){
 		  CarteWagon tmp = carteRetournee.get(pos);
 		  if(tmp instanceof CarteWagonJoker){
 			  if(compteurCarteDeckPiocher > 0 || compteurCarteRetourneePiocher > 0)
-				  return;
+				  return false;
 			  else{
 				  compteurCarteRetourneePiocher += 2;
 				  //defausse.add(tmp);
 				  tourDuJoueur.ajouterCarteWagon(carteRetournee.remove(pos));
 				  ajouterCarteManquanteRetournee();
 				  verifierNbCarteJokerRetournee();
-				  return;
+				 // return true;
+				  retour = true;
 			  }
 		  }
 		  
@@ -473,9 +483,11 @@ public class Partie implements IUpdatable, Serializable {
 			  compteurCarteRetourneePiocher += 1;
 			  ajouterCarteManquanteRetournee();
 			  verifierNbCarteJokerRetournee();
+			  retour = true;
 		  }
 	  }
 	  remettreDansDeckCarteDeLaDefausse();
+	  return retour;
   }
   
   synchronized public Vector<Challenge> copierChallengePourSelectionnerCeuxAPiocher(){
@@ -563,6 +575,9 @@ public class Partie implements IUpdatable, Serializable {
 	  return null;
   }
 
+  /**
+   * @return true le joueur peut piocher des challenges donc pas poser de routes, ni piocher, etc
+   */
   synchronized public final boolean isPiocherChallengeOK(){
 	  if(tourDuJoueur != null && compteurCarteDeckPiocher == 0 && compteurCarteRetourneePiocher <= 0
 			  && !carteChallengesPiocher && !routePoser && challenges.size() >= 1)
@@ -570,6 +585,9 @@ public class Partie implements IUpdatable, Serializable {
 	  return false;
   }
   
+  /**
+   * Ajoute les cartes manquantes parmis celles retournee
+   */
   synchronized private final void ajouterCarteManquanteRetournee() {
 	  remettreDansDeckCarteDeLaDefausse();
 	  

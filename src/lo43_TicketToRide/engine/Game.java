@@ -27,11 +27,11 @@ public class Game extends StateBasedGame {
 	/**
 	 * The current name of the project.
 	 */
-	public static final String NAME = "Ticket To Ride";
+	public static final String NAME = "Ticket To UTBM";
 	/**
 	 * The current version of the project.
 	 */
-	public static final String VERSION = "Version 1.0 Beta";
+	public static final String VERSION = "Version 2.0 Beta";
 	
 	
 	private static ArrayList<View> states;
@@ -48,6 +48,8 @@ public class Game extends StateBasedGame {
 	public static final int MAIN_MENU_SOLO_VIEW_ID = 12;
 	public static final int MAIN_MENU_MULTI_VIEW_ID = 13;
 	public static final int MAIN_MENU_PASSE_ET_JOUE_VIEW_ID = 14;
+	
+	public static final int SALON_VIEW_ID = 20;
 	
 	public static final int PARTIE_VIEW_ID = 64;
 	public static final int PARTIE_SOLO_VIEW_ID = 65;
@@ -87,10 +89,11 @@ public class Game extends StateBasedGame {
 		addState(new PartieSoloView());
 		addState(new PartiePasseView());
 		addState(new PartieMultiView());
+		addState(new SalonView());
 		/*
 		addState(new SoloView());
 		addState(new MultiView());
-		addState(new SalonView());
+		
 		
 		addState(new TransitionView());//*/
 		addState(new EndPartieView());

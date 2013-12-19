@@ -119,7 +119,7 @@ public class Route implements IRenderable, Serializable{
 	
 	/**
 	 * Faudra revoir le calcul des angles, j'ai repris ce code d'un ancien projet tres vieux, donc 
-	 * je sais pas s'il est vraiment juste
+	 * je sais pas s'il est vraiment juste, c'est presque juste mais il est fait pour des rotations d'images (du a slick)
 	 * @return
 	 */
 	protected final float calculerAngleEntreDeuxVilles(){

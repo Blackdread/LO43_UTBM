@@ -9,10 +9,7 @@ import java.io.Serializable;
  * 
  */
 public class Challenge implements Serializable{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2546823565778080558L;
 
 	protected int points;
@@ -32,6 +29,16 @@ public class Challenge implements Serializable{
 		depart = new Ville(copy.depart);
 	}
 
+	/**
+	 * Cherche a rejoindre les deux villes par les routes posseder par le joueur qui a cette couleur
+	 * @param carte la carte qui contient les villes et routes
+	 * @param colorOfPlayer couleur du joueur
+	 * @return true si reussi
+	 */
+	public boolean isChallengeSucceeded(final CarteJeu carte, final int colorOfPlayer){
+		return carte.isPossibleToJoinTwoVille(depart, arrivee, colorOfPlayer, null);
+	}
+	
 	public int getPoints() {
 		return points;
 	}

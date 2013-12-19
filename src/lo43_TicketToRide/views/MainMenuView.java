@@ -20,6 +20,8 @@ import lo43_TicketToRide.engine.Regles;
 import lo43_TicketToRide.engine.factory.FactoryCarteJeu;
 import lo43_TicketToRide.engine.factory.FactoryChallenges;
 import lo43_TicketToRide.engine.factory.FactoryPartie;
+import lo43_TicketToRide.engine.factory.FactoryIA.NiveauIA;
+import lo43_TicketToRide.engine.partie.IA;
 import lo43_TicketToRide.engine.partie.Joueur;
 import lo43_TicketToRide.engine.partie.Partie;
 import lo43_TicketToRide.utils.Colors;
@@ -116,7 +118,7 @@ public abstract class MainMenuView extends View {
 			colors[i] = i;
 		}
 		textFieldPseudo[0].setText(Configuration.getPseudo());
-		
+		isIA[0] = false;
 		
 		textSave = new TextField(container, container.getDefaultFont(), container.getWidth()-100, 200,30,20);
 		rectSave = new Rectangle(textSave.getX(),textSave.getY()+textSave.getHeight()+4,30,20);
@@ -289,9 +291,11 @@ public abstract class MainMenuView extends View {
 		// Ajout des joueurs
 		joueur.add(new Joueur(textFieldPseudo[0].getText(), colors[0],false));
 		for(int i=1;i<Regles.NB_MAX_JOUEUR;++i)
-			if(isJoueur[i] || isIA[i])
+			if(isJoueur[i])
 				joueur.add(new Joueur(textFieldPseudo[i].getText(), colors[i],isIA[i]));
-		
+			else if(isIA[i])
+				joueur.add(new IA(textFieldPseudo[i].getText(), colors[i],NiveauIA.facile));
+				
 		//if(joueur.size() > 1){
 			// Creation de la partie
 			Partie partie = FactoryPartie.getInstance().creerPartie(joueur);
@@ -307,8 +311,8 @@ public abstract class MainMenuView extends View {
 			partie.initialiserPartie();
 			
 			// Init la partie
-			((PartieView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(partie);
-			((PartieView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(partie);
+			((PartieSoloView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(partie);
+			((PartiePasseView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(partie);
 			
 			// rejoindre
 			//Fait dans la classe fille
@@ -319,9 +323,15 @@ public abstract class MainMenuView extends View {
 		Object tmp = Sauvegarde.load(file);
 		if(tmp != null){
 			Partie partie = (Partie) tmp;
-			((PartieView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(partie);
-			((PartieView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(partie);
+			((PartieSoloView)Game.getStateByID(Game.PARTIE_SOLO_VIEW_ID)).setPartie(partie);
+			((PartiePasseView)Game.getStateByID(Game.PARTIE_PASSE_ET_JOUE_VIEW_ID)).setPartie(partie);
 			System.out.println("Ok chargement partie sauvegarder");
+			try {
+				// Juste pour mettre un temps mort
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}else
 			System.err.println("erreur chargement partie sauvegarder");

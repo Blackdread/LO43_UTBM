@@ -40,6 +40,7 @@ public class StatsSerializable implements Serializable{
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
             oos.writeObject(hashStats);
+            oos.flush();
             //oos.writeObject(this);
 
             oos.close();
