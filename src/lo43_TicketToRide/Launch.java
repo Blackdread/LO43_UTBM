@@ -22,7 +22,7 @@ public class Launch {
 		//*
 		try {
 			Game g;
-			// Ou utilise la proprite : file.separator=\
+			// Ou utilise la proprite : file.separator=\    => serait bien de le mettre plus tard
 			String OSname = System.getProperties().getProperty("os.name");
 			if(OSname.equalsIgnoreCase("Mac OS X") || OSname.startsWith("linux")){
 				// Linux supporte les / normalement

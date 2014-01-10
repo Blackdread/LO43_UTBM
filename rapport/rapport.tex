@@ -47,7 +47,7 @@
    title=\lstname,                   % show the filename of files included with \lstinputlisting; also try caption instead of title
    language=java
 }
-\lstset{language=java,caption={Projet A13 LO43},label=DescriptiveLabel}
+\lstset{language=java,caption={Projet A13 LO43}}
 
 \hypersetup{
      bookmarks=true,         % show bookmarks bar?
@@ -612,7 +612,7 @@ Grâce aux Factory le jeu reste ouvert (modulable) à la possibilté :
 
 Par exemple, on peut si le jeu évolue ajouter de nouvelles carte wagon, il suffirait d'ajouter des lignes de codes dans FactoryCarteWagon (si on a accès à la source) sinon il suffit d'hériter de FactoryCarteWagon et d'instancier les nouvelles cartes et par défaut on appel la Factory mère ainsi on a surchargé la méthode mère pour créer des cartes.
 
-\section{Des amélioration possibles}
+\section{Des améliorations possibles}
 \subsection{Ajouter des "achievements"}
 Déjà possible avec la classe StatsSerializable (et Sauvegarde.java).\\
 Il est aussi possible de créer des classes pour chaque achievement car il faut voir les achievement comme des classes qui héritent toutes d'une même classe abstraite "Achievement".
